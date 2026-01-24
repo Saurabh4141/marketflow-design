@@ -1,0 +1,191 @@
+import { useState } from "react";
+import { Send, MapPin, Phone, Mail, Clock, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+const contactInfo = [
+  {
+    icon: MapPin,
+    label: "Address",
+    value: "Empire State Building, NYC",
+    subValue: "New York, NY 10001",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "+1 (234) 567-890",
+    subValue: "Mon-Fri 9am-6pm EST",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "info@coremarketresearch.com",
+    subValue: "24/7 Support Available",
+  },
+  {
+    icon: Clock,
+    label: "Business Hours",
+    value: "Monday - Friday",
+    subValue: "9:00 AM - 6:00 PM EST",
+  },
+];
+
+export const ContactSection = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulate form submission
+    setIsSubmitted(true);
+    setTimeout(() => setIsSubmitted(false), 3000);
+  };
+
+  return (
+    <section id="contact" className="py-20 md:py-32 bg-secondary/30 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 grid-pattern opacity-30" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            Get in Touch
+          </span>
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            Let's <span className="gradient-text">Connect</span>
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Have questions about our services? Ready to start your research project? 
+            We're here to help you make data-driven decisions.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
+          {/* Contact Info */}
+          <div className="lg:col-span-2 space-y-6">
+            {contactInfo.map((item) => (
+              <div
+                key={item.label}
+                className="group flex items-start gap-4 p-5 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <item.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-foreground mb-1">{item.label}</h4>
+                  <p className="text-foreground font-medium">{item.value}</p>
+                  <p className="text-sm text-muted-foreground">{item.subValue}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-3">
+            <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-lg">
+              <h3 className="font-display text-2xl font-bold text-foreground mb-2">
+                Send us a Message
+              </h3>
+              <p className="text-muted-foreground mb-8">
+                Fill out the form below and we'll get back to you within 24 hours.
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                      Full Name *
+                    </label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="John Doe"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="h-12 rounded-xl"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
+                      Email Address *
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="john@company.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="h-12 rounded-xl"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="company" className="block text-sm font-medium text-foreground mb-2">
+                    Company Name
+                  </label>
+                  <Input
+                    id="company"
+                    type="text"
+                    placeholder="Your Company"
+                    value={formData.company}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    className="h-12 rounded-xl"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
+                    Message *
+                  </label>
+                  <Textarea
+                    id="message"
+                    placeholder="Tell us about your research needs..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="min-h-32 rounded-xl resize-none"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="gradient"
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitted}
+                >
+                  {isSubmitted ? (
+                    <>
+                      <CheckCircle2 className="w-5 h-5" />
+                      Message Sent!
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-sm text-muted-foreground text-center">
+                  By submitting, you agree to our{" "}
+                  <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
