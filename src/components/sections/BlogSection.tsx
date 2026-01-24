@@ -1,5 +1,7 @@
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
+import { Link } from "react-router-dom";
 
 const blogPosts = [
   {
@@ -43,7 +45,7 @@ export const BlogSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             Latest Insights
           </span>
@@ -53,99 +55,102 @@ export const BlogSection = () => {
           <p className="text-lg text-muted-foreground">
             Stay updated with the latest trends, insights, and best practices in market research.
           </p>
-        </div>
+        </AnimatedSection>
 
         {/* Blog Grid */}
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Featured Post */}
           {featuredPost && (
-            <article className="group lg:row-span-2 rounded-3xl overflow-hidden bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-500">
-              <div className="relative h-64 lg:h-80 overflow-hidden">
-                <img
-                  src={featuredPost.image}
-                  alt={featuredPost.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                  {featuredPost.category}
-                </span>
-              </div>
-              <div className="p-6 lg:p-8">
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                  <span className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4" />
-                    {featuredPost.date}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="w-4 h-4" />
-                    {featuredPost.readTime}
-                  </span>
-                </div>
-                <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
-                  {featuredPost.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {featuredPost.excerpt}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <User className="w-5 h-5 text-primary" />
-                    </div>
-                    <span className="font-medium text-foreground">{featuredPost.author}</span>
-                  </div>
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 text-primary font-medium group/link"
-                  >
-                    Read More
-                    <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-              </div>
-            </article>
-          )}
-
-          {/* Regular Posts */}
-          <div className="flex flex-col gap-6">
-            {regularPosts.map((post) => (
-              <article
-                key={post.title}
-                className="group flex gap-5 p-4 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300"
-              >
-                <div className="w-32 h-32 md:w-40 md:h-32 rounded-xl overflow-hidden flex-shrink-0">
+            <AnimatedSection className="lg:row-span-2">
+              <article className="group h-full rounded-3xl overflow-hidden bg-card border border-border shadow-card hover:shadow-card-hover transition-all duration-500">
+                <div className="relative h-64 lg:h-80 overflow-hidden">
                   <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    src={featuredPost.image}
+                    alt={featuredPost.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="inline-block px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-2">
-                    {post.category}
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
+                  <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-primary text-primary-foreground text-xs font-medium">
+                    {featuredPost.category}
                   </span>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
+                </div>
+                <div className="p-6 lg:p-8">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                    <span className="flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4" />
+                      {featuredPost.date}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Clock className="w-4 h-4" />
+                      {featuredPost.readTime}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
+                    {featuredPost.title}
                   </h3>
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    {featuredPost.excerpt}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <User className="w-5 h-5 text-primary" />
+                      </div>
+                      <span className="font-medium text-foreground">{featuredPost.author}</span>
+                    </div>
+                    <a
+                      href="#"
+                      className="inline-flex items-center gap-2 text-primary font-medium group/link"
+                    >
+                      Read More
+                      <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                    </a>
                   </div>
                 </div>
               </article>
+            </AnimatedSection>
+          )}
+
+          {/* Regular Posts */}
+          <StaggerContainer className="flex flex-col gap-6" staggerDelay={0.1}>
+            {regularPosts.map((post) => (
+              <StaggerItem key={post.title}>
+                <article className="group flex gap-5 p-4 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
+                  <div className="w-32 h-32 md:w-40 md:h-32 rounded-xl overflow-hidden flex-shrink-0">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="inline-block px-2.5 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium mb-2">
+                      {post.category}
+                    </span>
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                      <span>{post.date}</span>
+                      <span>•</span>
+                      <span>{post.readTime}</span>
+                    </div>
+                  </div>
+                </article>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            View All Articles
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-        </div>
+        <AnimatedSection className="text-center mt-12">
+          <Link to="/blog">
+            <Button variant="outline" size="lg">
+              View All Articles
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </Link>
+        </AnimatedSection>
       </div>
     </section>
   );

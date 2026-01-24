@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ArrowRight, Clock, TrendingUp, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const tabs = ["Latest Reports", "Trending Reports"];
@@ -105,7 +107,7 @@ export const ReportsSection = () => {
     <section id="reports" className="py-20 md:py-32 bg-secondary/30 relative">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+        <AnimatedSection className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <div>
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               Research Reports
@@ -132,61 +134,62 @@ export const ReportsSection = () => {
               </button>
             ))}
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Reports Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {currentReports.map((report, index) => (
-            <div
-              key={report.title}
-              className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[report.category] || "bg-gray-100 text-gray-700")}>
-                  {report.category}
-                </span>
-                <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
-                  <TrendingUp className="w-4 h-4" />
-                  {report.growth}
+        <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6" staggerDelay={0.08}>
+          {currentReports.map((report) => (
+            <StaggerItem key={report.title}>
+              <div className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+                {/* Header */}
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[report.category] || "bg-muted text-muted-foreground")}>
+                    {report.category}
+                  </span>
+                  <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
+                    <TrendingUp className="w-4 h-4" />
+                    {report.growth}
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
+                  {report.title}
+                </h3>
+
+                {/* Meta */}
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-4 h-4" />
+                    {report.date}
+                  </span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3">
+                  <Button variant="outline" size="sm" className="flex-1">
+                    <Eye className="w-4 h-4" />
+                    Preview
+                  </Button>
+                  <Button variant="default" size="sm" className="flex-1">
+                    <Download className="w-4 h-4" />
+                    Download
+                  </Button>
                 </div>
               </div>
-
-              {/* Title */}
-              <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                {report.title}
-              </h3>
-
-              {/* Meta */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" />
-                  {report.date}
-                </span>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3">
-                <Button variant="outline" size="sm" className="flex-1">
-                  <Eye className="w-4 h-4" />
-                  Preview
-                </Button>
-                <Button variant="default" size="sm" className="flex-1">
-                  <Download className="w-4 h-4" />
-                  Download
-                </Button>
-              </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* CTA */}
-        <div className="text-center mt-12">
-          <Button variant="gradient" size="lg">
-            Browse All Reports
-            <ArrowRight className="w-5 h-5" />
-          </Button>
-        </div>
+        <AnimatedSection className="text-center mt-12">
+          <Link to="/reports">
+            <Button variant="gradient" size="lg">
+              Browse All Reports
+              <ArrowRight className="w-5 h-5" />
+            </Button>
+          </Link>
+        </AnimatedSection>
       </div>
     </section>
   );

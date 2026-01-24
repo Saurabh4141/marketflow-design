@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Search, ChevronDown, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MegaMenu } from "@/components/layout/MegaMenu";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { label: "Industries", href: "#industries", hasDropdown: true },
-  { label: "Services", href: "#services", hasDropdown: true },
-  { label: "Reports", href: "#reports" },
-  { label: "Blog", href: "#blog" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Industries", href: "#industries", hasMegaMenu: true, menuType: "industries" as const },
+  { label: "Services", href: "#services", hasMegaMenu: true, menuType: "services" as const },
+  { label: "Reports", href: "/reports" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeMegaMenu, setActiveMegaMenu] = useState<"industries" | "services" | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +27,20 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mega menu on route change
+  useEffect(() => {
+    setActiveMegaMenu(null);
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const handleNavClick = (item: typeof navItems[0]) => {
+    if (item.hasMegaMenu) {
+      setActiveMegaMenu(activeMegaMenu === item.menuType ? null : item.menuType!);
+    } else {
+      setActiveMegaMenu(null);
+    }
+  };
 
   return (
     <>
@@ -52,14 +69,14 @@ export const Header = () => {
           "sticky top-0 z-50 w-full transition-all duration-300",
           isScrolled
             ? "bg-card/95 backdrop-blur-xl shadow-lg border-b border-border/50"
-            : "bg-transparent"
+            : "bg-card"
         )}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 relative">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-primary flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
                 <span className="text-primary-foreground font-display font-bold text-lg md:text-xl">C</span>
               </div>
               <div className="hidden sm:block">
@@ -71,14 +88,32 @@ export const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
-                >
-                  {item.label}
-                  {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
-                </a>
+                <div key={item.label} className="relative">
+                  {item.hasMegaMenu ? (
+                    <button
+                      onClick={() => handleNavClick(item)}
+                      className={cn(
+                        "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors rounded-lg",
+                        activeMegaMenu === item.menuType
+                          ? "text-primary bg-primary/5"
+                          : "text-foreground/80 hover:text-primary hover:bg-primary/5"
+                      )}
+                    >
+                      {item.label}
+                      <ChevronDown className={cn(
+                        "w-4 h-4 transition-transform",
+                        activeMegaMenu === item.menuType && "rotate-180"
+                      )} />
+                    </button>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
               ))}
             </nav>
 
@@ -87,9 +122,11 @@ export const Header = () => {
               <button className="p-2 text-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5">
                 <Search className="w-5 h-5" />
               </button>
-              <Button variant="gradient" size="sm" className="hidden sm:flex">
-                Request Quote
-              </Button>
+              <Link to="/contact">
+                <Button variant="gradient" size="sm" className="hidden sm:flex">
+                  Request Quote
+                </Button>
+              </Link>
               
               {/* Mobile Menu Toggle */}
               <button
@@ -100,6 +137,15 @@ export const Header = () => {
               </button>
             </div>
           </div>
+
+          {/* Mega Menu */}
+          {activeMegaMenu && (
+            <MegaMenu
+              type={activeMegaMenu}
+              isOpen={!!activeMegaMenu}
+              onClose={() => setActiveMegaMenu(null)}
+            />
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -107,19 +153,21 @@ export const Header = () => {
           <div className="lg:hidden bg-card border-t border-border animate-fade-in">
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.label}
-                  href={item.href}
+                  to={item.href}
                   className="flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
-                  {item.hasDropdown && <ChevronDown className="w-4 h-4" />}
-                </a>
+                  {item.hasMegaMenu && <ChevronDown className="w-4 h-4" />}
+                </Link>
               ))}
-              <Button variant="gradient" className="mt-4">
-                Request Quote
-              </Button>
+              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button variant="gradient" className="mt-4 w-full">
+                  Request Quote
+                </Button>
+              </Link>
             </nav>
           </div>
         )}
