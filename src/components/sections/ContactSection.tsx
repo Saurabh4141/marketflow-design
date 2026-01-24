@@ -3,6 +3,7 @@ import { Send, MapPin, Phone, Mail, Clock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 
 const contactInfo = [
   {
@@ -54,7 +55,7 @@ export const ContactSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             Get in Touch
           </span>
@@ -65,30 +66,29 @@ export const ContactSection = () => {
             Have questions about our services? Ready to start your research project? 
             We're here to help you make data-driven decisions.
           </p>
-        </div>
+        </AnimatedSection>
 
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
           {/* Contact Info */}
-          <div className="lg:col-span-2 space-y-6">
+          <StaggerContainer className="lg:col-span-2 space-y-6" staggerDelay={0.1}>
             {contactInfo.map((item) => (
-              <div
-                key={item.label}
-                className="group flex items-start gap-4 p-5 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  <item.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
+              <StaggerItem key={item.label}>
+                <div className="group flex items-start gap-4 p-5 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <item.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-foreground mb-1">{item.label}</h4>
+                    <p className="text-foreground font-medium">{item.value}</p>
+                    <p className="text-sm text-muted-foreground">{item.subValue}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-medium text-foreground mb-1">{item.label}</h4>
-                  <p className="text-foreground font-medium">{item.value}</p>
-                  <p className="text-sm text-muted-foreground">{item.subValue}</p>
-                </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
 
           {/* Contact Form */}
-          <div className="lg:col-span-3">
+          <AnimatedSection delay={0.2} direction="right" className="lg:col-span-3">
             <div className="p-8 md:p-10 rounded-3xl bg-card border border-border shadow-lg">
               <h3 className="font-display text-2xl font-bold text-foreground mb-2">
                 Send us a Message
@@ -183,7 +183,7 @@ export const ContactSection = () => {
                 </p>
               </form>
             </div>
-          </div>
+          </AnimatedSection>
         </div>
       </div>
     </section>

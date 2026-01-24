@@ -1,5 +1,4 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
+import { PageLayout } from "@/components/layout/PageLayout";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { TrustSection } from "@/components/sections/TrustSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -10,19 +9,15 @@ import { ContactSection } from "@/components/sections/ContactSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <TrustSection />
-        <ServicesSection />
-        <ReportsSection />
-        <AboutSection />
-        <BlogSection />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <PageLayout>
+      <HeroSection />
+      <TrustSection />
+      <ServicesSection />
+      <ReportsSection />
+      <AboutSection />
+      <BlogSection />
+      <ContactSection />
+    </PageLayout>
   );
 };
 

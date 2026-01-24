@@ -1,5 +1,7 @@
 import { CheckCircle2, Award, Users, Globe, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
+import { Link } from "react-router-dom";
 
 const features = [
   "150,000+ comprehensive market reports",
@@ -39,7 +41,7 @@ export const AboutSection = () => {
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content */}
-          <div>
+          <AnimatedSection>
             <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               About Us
             </span>
@@ -64,28 +66,29 @@ export const AboutSection = () => {
               ))}
             </div>
 
-            <Button variant="gradient" size="lg">
-              Learn More About Us
-            </Button>
-          </div>
+            <Link to="/about">
+              <Button variant="gradient" size="lg">
+                Learn More About Us
+              </Button>
+            </Link>
+          </AnimatedSection>
 
           {/* Values Grid */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            {values.map((value, index) => (
-              <div
-                key={value.title}
-                className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  <value.icon className="w-7 h-7 text-primary group-hover:text-primary-foreground transition-colors" />
+          <StaggerContainer className="grid sm:grid-cols-2 gap-6" staggerDelay={0.1}>
+            {values.map((value) => (
+              <StaggerItem key={value.title}>
+                <div className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                    <value.icon className="w-7 h-7 text-primary group-hover:text-primary-foreground transition-colors" />
+                  </div>
+                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+                    {value.title}
+                  </h3>
+                  <p className="text-muted-foreground">{value.description}</p>
                 </div>
-                <h3 className="font-display text-xl font-semibold text-foreground mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-muted-foreground">{value.description}</p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </div>
     </section>
