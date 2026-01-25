@@ -42,12 +42,19 @@ export const HeroSection = () => {
             <span className="text-primary-foreground/90 text-sm font-medium">AI-Powered Market Intelligence</span>
           </motion.div>
 
+          {/* SEO H1 - Screen reader accessible */}
+          <h1 className="sr-only">
+            Market Research Company in India Providing Industry Reports & Strategic Insights
+          </h1>
+
           {/* Main Heading */}
-          <motion.h1
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-6 leading-[1.1]"
+            role="heading"
+            aria-level={2}
           >
             Competitive Insights at the{" "}
             <span className="relative">
@@ -65,7 +72,7 @@ export const HeroSection = () => {
                 />
               </svg>
             </span>
-          </motion.h1>
+          </motion.p>
 
           {/* Subheading */}
           <motion.p
@@ -102,23 +109,28 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+            className="space-y-6"
           >
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="group p-4 md:p-6 rounded-2xl bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/10 hover:bg-primary-foreground/15 transition-all duration-300"
-              >
-                <stat.icon className="w-6 h-6 text-accent mb-3 group-hover:scale-110 transition-transform" />
-                <div className="font-display text-2xl md:text-3xl font-bold text-primary-foreground mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-primary-foreground/70">{stat.label}</div>
-              </motion.div>
-            ))}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
+                  className="group p-5 md:p-8 rounded-2xl bg-primary-foreground/15 backdrop-blur-md border border-primary-foreground/20 hover:bg-primary-foreground/20 transition-all duration-300"
+                >
+                  <stat.icon className="w-7 h-7 text-accent mb-4 group-hover:scale-110 transition-transform" />
+                  <div className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground mb-2 tracking-tight">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm md:text-base text-primary-foreground/80 font-medium">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+            <p className="text-center text-primary-foreground/60 text-sm mt-4">
+              Figures are based on internal research database and global analyst network.
+            </p>
           </motion.div>
         </div>
       </div>

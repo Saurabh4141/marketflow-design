@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
@@ -20,6 +21,7 @@ const categories = [
 const reports = [
   {
     title: "Global AI in Healthcare Market Analysis 2024",
+    slug: "ai-healthcare-market-2024",
     category: "Healthcare",
     date: "Jan 2024",
     growth: "+28.6%",
@@ -29,6 +31,7 @@ const reports = [
   },
   {
     title: "Electric Vehicle Battery Technology Report",
+    slug: "ev-battery-technology-2024",
     category: "Automotive",
     date: "Jan 2024",
     growth: "+31.2%",
@@ -37,6 +40,7 @@ const reports = [
   },
   {
     title: "Sustainable Packaging Market Outlook",
+    slug: "sustainable-packaging-outlook",
     category: "Consumer Goods",
     date: "Jan 2024",
     growth: "+19.5%",
@@ -45,6 +49,7 @@ const reports = [
   },
   {
     title: "5G Infrastructure Investment Analysis",
+    slug: "5g-infrastructure-investment",
     category: "Technology",
     date: "Dec 2023",
     growth: "+24.8%",
@@ -53,6 +58,7 @@ const reports = [
   },
   {
     title: "Renewable Energy Storage Solutions",
+    slug: "renewable-energy-storage",
     category: "Energy",
     date: "Dec 2023",
     growth: "+22.1%",
@@ -61,6 +67,7 @@ const reports = [
   },
   {
     title: "Fintech Payment Solutions Market",
+    slug: "fintech-payment-solutions",
     category: "Finance",
     date: "Dec 2023",
     growth: "+26.3%",
@@ -69,6 +76,7 @@ const reports = [
   },
   {
     title: "Cybersecurity Solutions Market 2024",
+    slug: "cybersecurity-solutions-2024",
     category: "Technology",
     date: "Dec 2023",
     growth: "+21.7%",
@@ -77,6 +85,7 @@ const reports = [
   },
   {
     title: "Plant-Based Food Market Analysis",
+    slug: "plant-based-food-analysis",
     category: "Consumer Goods",
     date: "Nov 2023",
     growth: "+16.3%",
@@ -165,52 +174,54 @@ const Reports = () => {
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredReports.map((report) => (
               <StaggerItem key={report.title}>
-                <div className={cn(
-                  "group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300",
-                  report.featured && "ring-2 ring-primary/20"
-                )}>
-                  {report.featured && (
-                    <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
-                      Featured Report
-                    </span>
-                  )}
-                  
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[report.category])}>
-                      {report.category}
-                    </span>
-                    <div className="flex items-center gap-1 text-green-600 text-sm font-medium">
-                      <TrendingUp className="w-4 h-4" />
-                      {report.growth}
+                <Link to={`/reports/${report.slug}`} className="block h-full">
+                  <div className={cn(
+                    "group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300",
+                    report.featured && "ring-2 ring-primary/20"
+                  )}>
+                    {report.featured && (
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+                        Featured Report
+                      </span>
+                    )}
+                    
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[report.category])}>
+                        {report.category}
+                      </span>
+                      <div className="flex items-center gap-1 text-emerald-600 text-sm font-medium">
+                        <TrendingUp className="w-4 h-4" />
+                        {report.growth}
+                      </div>
+                    </div>
+
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
+                      {report.title}
+                    </h3>
+
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="w-4 h-4" />
+                        {report.date}
+                      </span>
+                      <span>{report.pages} pages</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-border">
+                      <span className="font-display text-xl font-bold text-foreground">
+                        {report.price}
+                      </span>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button variant="default" size="sm">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
-
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                    {report.title}
-                  </h3>
-
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-4 h-4" />
-                      {report.date}
-                    </span>
-                    <span>{report.pages} pages</span>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <span className="font-display text-xl font-bold text-foreground">
-                      {report.price}
-                    </span>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button variant="default" size="sm">
-                        <Download className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                </Link>
               </StaggerItem>
             ))}
           </StaggerContainer>
