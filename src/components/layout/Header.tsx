@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Industries", href: "#industries", hasMegaMenu: true, menuType: "industries" as const },
-  { label: "Services", href: "#services", hasMegaMenu: true, menuType: "services" as const },
+  { label: "Services", href: "/services", hasMegaMenu: true, menuType: "services" as const },
   { label: "Reports", href: "/reports" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
