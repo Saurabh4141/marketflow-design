@@ -8,15 +8,15 @@ import {
   Car, 
   Plane, 
   Landmark,
-  Target,
   PieChart,
-  DollarSign,
-  Package,
-  MessageCircle,
   BarChart3,
   Brain,
-  Heart,
   TrendingUp,
+  Lightbulb,
+  DollarSign,
+  Heart,
+  Target,
+  MessageCircle,
   ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -39,15 +39,15 @@ const industries = [
 ];
 
 const services = [
-  { icon: Target, title: "Market Opportunity", description: "Identify growth opportunities", href: "/services/market-opportunity" },
-  { icon: PieChart, title: "Segmentation Analysis", description: "Understand your audience", href: "/services/segmentation" },
-  { icon: DollarSign, title: "Pricing Strategy", description: "Optimize your pricing", href: "/services/pricing" },
-  { icon: Package, title: "Product Research", description: "Product & brand insights", href: "/services/product-research" },
-  { icon: MessageCircle, title: "Sentiment Analysis", description: "Social media insights", href: "/services/sentiment" },
-  { icon: BarChart3, title: "Competitor Analysis", description: "Stay ahead of competition", href: "/services/competitors" },
-  { icon: Brain, title: "Consumer Behavior", description: "Understand customer decisions", href: "/services/consumer-behavior" },
-  { icon: Heart, title: "Customer Satisfaction", description: "Measure loyalty & NPS", href: "/services/satisfaction" },
-  { icon: TrendingUp, title: "Trends & Forecasting", description: "Predict market shifts", href: "/services/trends" },
+  { icon: PieChart, title: "Market Segmentation Analysis", description: "Identify and understand target segments", href: "/services/market-segmentation-analysis" },
+  { icon: BarChart3, title: "Competitor Analysis", description: "Stay ahead of competition", href: "/services/competitor-analysis" },
+  { icon: Brain, title: "Consumer Behavior Analysis", description: "Understand customer decisions", href: "/services/consumer-behavior-analysis" },
+  { icon: TrendingUp, title: "Industry Trends & Forecasting", description: "Predict market shifts and opportunities", href: "/services/industry-trends-forecasting" },
+  { icon: Lightbulb, title: "Product and Brand Research", description: "Product insights and brand perception", href: "/services/product-brand-research" },
+  { icon: DollarSign, title: "Pricing Strategy Research", description: "Optimize pricing for profitability", href: "/services/pricing-strategy-research" },
+  { icon: Heart, title: "Customer Satisfaction and Loyalty Research", description: "Measure NPS and customer loyalty", href: "/services/customer-satisfaction-loyalty-research" },
+  { icon: Target, title: "Market Opportunity Identification", description: "Discover growth opportunities", href: "/services/market-opportunity-identification" },
+  { icon: MessageCircle, title: "Social Media and Sentiment Analysis", description: "Monitor brand perception online", href: "/services/social-media-sentiment-analysis" },
 ];
 
 export const MegaMenu = ({ type, isOpen, onClose }: MegaMenuProps) => {
