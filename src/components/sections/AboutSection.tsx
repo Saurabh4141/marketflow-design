@@ -37,7 +37,7 @@ const values = [
 
 export const AboutSection = () => {
   return (
-    <section id="about" className="py-20 md:py-32 bg-background relative overflow-hidden">
+    <section id="about" className="py-8 md:py-12 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content */}

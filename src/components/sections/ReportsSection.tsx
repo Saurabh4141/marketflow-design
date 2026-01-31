@@ -104,7 +104,7 @@ export const ReportsSection = () => {
   const currentReports = activeTab === 0 ? reports.latest : reports.trending;
 
   return (
-    <section id="reports" className="py-20 md:py-32 bg-secondary/30 relative">
+    <section id="reports" className="py-8 md:py-12 bg-secondary/30 relative">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <AnimatedSection className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
@@ -169,11 +169,11 @@ export const ReportsSection = () => {
                 <div className="flex gap-3">
                   <Button variant="outline" size="sm" className="flex-1">
                     <Eye className="w-4 h-4" />
-                    Preview
+                    Read More..
                   </Button>
                   <Button variant="default" size="sm" className="flex-1">
-                    <Download className="w-4 h-4" />
-                    Download
+                    Buy Now
+                     <ArrowRight className="w-5 h-5" />
                   </Button>
                 </div>
               </div>

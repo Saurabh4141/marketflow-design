@@ -36,7 +36,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-2 mt-2 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
             <span className="text-primary-foreground/90 text-sm font-medium">AI-Powered Market Intelligence</span>
@@ -130,7 +130,7 @@ export const HeroSection = () => {
                 </motion.div>
               ))}
             </div>
-            <p className="text-center text-primary-foreground/50 text-xs sm:text-sm mt-6">
+            <p className="text-center text-primary-foreground text-xs sm:text-sm mt-6">
               Figures are based on internal research database and global analyst network.
             </p>
           </motion.div>

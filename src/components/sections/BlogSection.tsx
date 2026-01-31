@@ -39,7 +39,7 @@ export const BlogSection = () => {
   const regularPosts = blogPosts.filter((post) => !post.featured);
 
   return (
-    <section id="blog" className="py-20 md:py-32 bg-background relative overflow-hidden">
+    <section id="blog" className="py-8 md:py-12 bg-background relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-mesh-gradient opacity-30" />
 
@@ -53,7 +53,7 @@ export const BlogSection = () => {
             From Our <span className="gradient-text">Blog</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            Stay updated with the latest trends, insights, and best practices in market research.
+            Read expert insights on market research methodologies, industry trends, consumer behavior, and business strategy.
           </p>
         </AnimatedSection>
 

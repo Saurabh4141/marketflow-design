@@ -134,28 +134,6 @@ const Industry = () => {
           </div>
         </section>
 
-        {/* Key Insights */}
-        <section className="py-12">
-          <div className="container mx-auto px-4">
-            <AnimatedSection>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
-                Key Industry Insights
-              </h2>
-            </AnimatedSection>
-            <StaggerContainer className="grid md:grid-cols-2 gap-4">
-              {detail.keyInsights.map((insight, index) => (
-                <StaggerItem key={index}>
-                  <div className="p-5 rounded-xl bg-primary/5 border border-primary/10 flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary font-bold text-sm">{index + 1}</span>
-                    </div>
-                    <p className="text-foreground">{insight}</p>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </div>
-        </section>
 
         {/* Top Players */}
         <section className="py-12 bg-secondary/30">
@@ -240,33 +218,6 @@ const Industry = () => {
           </div>
         </section>
 
-        {/* Other Industries */}
-        <section className="py-16 bg-secondary/30">
-          <div className="container mx-auto px-4">
-            <AnimatedSection>
-              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
-                Explore Other Industries
-              </h2>
-            </AnimatedSection>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {industries.filter(i => i.slug !== slug).map((ind) => (
-                <Link
-                  key={ind.slug}
-                  to={ind.href}
-                  className="group p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary transition-colors">
-                    <ind.icon className="w-5 h-5 text-primary group-hover:text-primary-foreground" />
-                  </div>
-                  <h4 className="font-medium text-foreground group-hover:text-primary transition-colors">
-                    {ind.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground">{ind.description}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* CTA */}
         <section className="py-20">
@@ -409,33 +360,6 @@ const Industry = () => {
         </div>
       </section>
 
-      {/* Industries Grid */}
-      <section className="py-16 bg-secondary/30">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8 text-center">
-              Browse by Industry
-            </h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {industries.map((ind) => (
-              <Link
-                key={ind.slug}
-                to={ind.href}
-                className="group p-5 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-md transition-all text-center"
-              >
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3 mx-auto group-hover:bg-primary transition-colors">
-                  <ind.icon className="w-6 h-6 text-primary group-hover:text-primary-foreground" />
-                </div>
-                <h4 className="font-medium text-foreground group-hover:text-primary transition-colors">
-                  {ind.title}
-                </h4>
-                <p className="text-sm text-muted-foreground mt-1">{ind.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20">

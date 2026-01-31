@@ -15,33 +15,9 @@ const Index = () => {
       <HeroSection />
       <TrustSection />
       <ServicesSection />
-      
-      {/* Reports Section with Intro */}
-      <section className="pt-16 pb-0">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <p className="text-center text-muted-foreground max-w-3xl mx-auto text-lg mb-0">
-              Explore our latest and trending market research reports covering industry trends, market size, growth opportunities, and future forecasts.
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
       <ReportsSection />
-      
       <AboutSection />
-      
-      {/* Blog Section with Intro */}
-      <section className="pt-16 pb-0">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <p className="text-center text-muted-foreground max-w-3xl mx-auto text-lg mb-0">
-              Read expert insights on market research methodologies, industry trends, consumer behavior, and business strategy.
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
       <BlogSection />
-      
       <FAQSection />
       <ContactSection />
     </PageLayout>

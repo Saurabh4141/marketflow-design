@@ -49,7 +49,7 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-32 bg-secondary/30 relative overflow-hidden">
+    <section id="contact" className="py-8 md:py-12 bg-secondary/30 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-30" />
 

@@ -1,15 +1,30 @@
-import { 
-  Building2, 
-  Cpu, 
-  ShoppingBag, 
-  Zap, 
-  Stethoscope, 
-  Car, 
-  Plane, 
+import {
+  Building2,
+  Cpu,
+  ShoppingBag,
+  Zap,
+  Stethoscope,
+  Car,
+  Plane,
   Landmark,
-  LucideIcon
+  UtensilsCrossed,
+  FlaskConical,
+  Factory,
+  Wrench,
+  Pill,
+  Hospital,
+  Syringe,
+  Shield,
+  CircuitBoard,
+  Wheat,
+  Package,
+  Home,
+  LucideIcon,
 } from "lucide-react";
 
+/* =====================================================
+   TYPES
+===================================================== */
 export interface Industry {
   icon: LucideIcon;
   title: string;
@@ -17,65 +32,6 @@ export interface Industry {
   description: string;
   href: string;
 }
-
-export const industries: Industry[] = [
-  { 
-    icon: Stethoscope, 
-    title: "Healthcare", 
-    slug: "healthcare",
-    description: "Medical devices, pharma, biotech", 
-    href: "/industry/healthcare" 
-  },
-  { 
-    icon: Cpu, 
-    title: "Technology", 
-    slug: "technology",
-    description: "Software, hardware, AI/ML", 
-    href: "/industry/technology" 
-  },
-  { 
-    icon: ShoppingBag, 
-    title: "Consumer Goods", 
-    slug: "consumer-goods",
-    description: "FMCG, retail, e-commerce", 
-    href: "/industry/consumer-goods" 
-  },
-  { 
-    icon: Zap, 
-    title: "Energy", 
-    slug: "energy",
-    description: "Oil, gas, renewables", 
-    href: "/industry/energy" 
-  },
-  { 
-    icon: Landmark, 
-    title: "Financial Services", 
-    slug: "finance",
-    description: "Banking, insurance, fintech", 
-    href: "/industry/finance" 
-  },
-  { 
-    icon: Car, 
-    title: "Automotive", 
-    slug: "automotive",
-    description: "EVs, components, mobility", 
-    href: "/industry/automotive" 
-  },
-  { 
-    icon: Plane, 
-    title: "Aerospace & Defense", 
-    slug: "aerospace",
-    description: "Aviation, space, defense", 
-    href: "/industry/aerospace" 
-  },
-  { 
-    icon: Building2, 
-    title: "Real Estate", 
-    slug: "real-estate",
-    description: "Commercial, residential", 
-    href: "/industry/real-estate" 
-  },
-];
 
 export interface IndustryDetail {
   title: string;
@@ -95,165 +51,424 @@ export interface IndustryDetail {
   }[];
 }
 
+/* =====================================================
+   INDUSTRY LIST (NAV / GRID)
+===================================================== */
+export const industries: Industry[] = [
+  { icon: Car, title: "Automobile & Transportation", slug: "automobile-transportation", description: "Vehicles, logistics, mobility solutions", href: "/industry/automobile-transportation" },
+  { icon: ShoppingBag, title: "Consumer Products", slug: "consumer-products", description: "Retail, lifestyle, consumer goods", href: "/industry/consumer-products" },
+  { icon: UtensilsCrossed, title: "Food, Beverage & Nutrition", slug: "food-beverage-nutrition", description: "Food processing, beverages, nutrition", href: "/industry/food-beverage-nutrition" },
+  { icon: FlaskConical, title: "Chemicals & Materials", slug: "chemicals-materials", description: "Specialty chemicals, raw materials", href: "/industry/chemicals-materials" },
+  { icon: Cpu, title: "Technology", slug: "technology", description: "Software, hardware, digital solutions", href: "/industry/technology" },
+  { icon: Factory, title: "Industrial Automation", slug: "industrial-automation", description: "Manufacturing, robotics, automation", href: "/industry/industrial-automation" },
+  { icon: Wrench, title: "Services & Utilities", slug: "services-utilities", description: "Business services, utilities", href: "/industry/services-utilities" },
+  { icon: Pill, title: "Pharmaceutical", slug: "pharmaceutical", description: "Drugs, therapeutics, life sciences", href: "/industry/pharmaceutical" },
+  { icon: Hospital, title: "Healthcare IT & Services", slug: "healthcare-it-services", description: "Health tech, medical services", href: "/industry/healthcare-it-services" },
+  { icon: Syringe, title: "Medical Devices & Consumables", slug: "medical-devices-consumables", description: "Consumables, disposables, devices", href: "/industry/medical-devices-consumables" },
+  { icon: Stethoscope, title: "Medical Devices", slug: "medical-devices", description: "Diagnostic and therapeutic devices", href: "/industry/medical-devices" },
+  { icon: Shield, title: "IT Security & Software", slug: "it-security-software", description: "Cybersecurity, enterprise software", href: "/industry/it-security-software" },
+  { icon: CircuitBoard, title: "Electronics & Semiconductors", slug: "electronics-semiconductor", description: "Chips, electronic components", href: "/industry/electronics-semiconductor" },
+  { icon: Wheat, title: "Agriculture", slug: "agriculture", description: "Farming, agritech, crop science", href: "/industry/agriculture" },
+  { icon: Package, title: "Packaging & Transport", slug: "packaging-transport", description: "Packaging, logistics solutions", href: "/industry/packaging-transport" },
+  { icon: Zap, title: "Energy & Power", slug: "energy-power", description: "Renewables, oil & gas, power generation", href: "/industry/energy-power" },
+  { icon: Building2, title: "Construction & Real Estate", slug: "construction-real-estate", description: "Infrastructure, real estate", href: "/industry/construction-real-estate" },
+  { icon: Home, title: "Daily Necessities", slug: "daily-necessities", description: "Household essentials", href: "/industry/daily-necessities" },
+  { icon: Plane, title: "Aerospace & Defense", slug: "aerospace-defense", description: "Aviation, space, defense", href: "/industry/aerospace-defense" },
+  { icon: Landmark, title: "Financial Services", slug: "financial-services", description: "Banking, insurance, fintech", href: "/industry/financial-services" },
+];
+
+/* =====================================================
+   INDUSTRY DETAILS (ALL INDUSTRIES – NO MISSING)
+===================================================== */
 export const industryDetails: Record<string, IndustryDetail> = {
-  healthcare: {
-    title: "Healthcare",
-    description: "Medical devices, pharma, biotech",
-    overview: "The global healthcare market continues to evolve with technological advancements, aging populations, and increasing focus on preventive care. Our research covers pharmaceutical developments, medical device innovations, biotechnology breakthroughs, and healthcare delivery systems across all major regions.",
+  "automobile-transportation": {
+    title: "Automobile & Transportation",
+    description: "Vehicles, logistics, mobility solutions",
+    overview: "This industry is being reshaped by electric vehicles, smart logistics, autonomous driving, and shared mobility models across global markets.",
     keyInsights: [
-      "Digital health solutions driving 25% of new investments",
-      "Personalized medicine reshaping treatment paradigms",
-      "Telehealth adoption remains elevated post-pandemic",
-      "AI diagnostics gaining regulatory approvals globally"
+      "EV adoption accelerating worldwide",
+      "Autonomous mobility moving toward commercial use",
+      "Logistics digitization improving efficiency",
+      "Urban mobility solutions expanding rapidly",
     ],
-    marketSize: "$12.2 Trillion",
-    growthRate: "+7.8% CAGR",
-    topPlayers: ["Johnson & Johnson", "Pfizer", "UnitedHealth Group", "Roche", "Novartis"],
+    marketSize: "$4.5 Trillion",
+    growthRate: "+8.1% CAGR",
+    topPlayers: ["Toyota", "Volkswagen", "Tesla", "BYD", "Daimler"],
     reports: [
-      { title: "Global AI in Healthcare Market Analysis 2024", slug: "ai-healthcare-market-2024", date: "Jan 2024", growth: "+28.6%", pages: 245, price: "$3,500" },
-      { title: "Telehealth Services Market Report", slug: "telehealth-services-2024", date: "Dec 2023", growth: "+18.3%", pages: 189, price: "$2,900" },
-      { title: "Medical Devices Innovation Outlook", slug: "medical-devices-2024", date: "Nov 2023", growth: "+12.5%", pages: 215, price: "$3,200" },
-    ]
+      { title: "Global Electric Vehicle Market Outlook 2024", slug: "electric-vehicle-market-2024", date: "Jan 2024", growth: "+21.4%", pages: 260, price: "$3,600" },
+      { title: "Autonomous Vehicle Technology Report", slug: "autonomous-vehicles-technology", date: "Dec 2023", growth: "+19.2%", pages: 230, price: "$3,200" },
+      { title: "Smart Logistics & Transportation Market", slug: "smart-logistics-transportation", date: "Nov 2023", growth: "+14.7%", pages: 210, price: "$2,900" },
+    ],
   },
-  technology: {
+
+  "consumer-products": {
+    title: "Consumer Products",
+    description: "Retail, lifestyle, consumer goods",
+    overview: "Consumer product markets are influenced by sustainability, digital commerce, and evolving consumer preferences.",
+    keyInsights: [
+      "Private labels gaining traction",
+      "Eco-friendly products influencing purchases",
+      "Omnichannel retail becoming standard",
+    ],
+    marketSize: "$15 Trillion",
+    growthRate: "+5.2% CAGR",
+    topPlayers: ["Procter & Gamble", "Unilever", "Nestlé", "PepsiCo"],
+    reports: [
+      { title: "Global Consumer Goods Market Trends 2024", slug: "consumer-goods-market-2024", date: "Jan 2024", growth: "+6.1%", pages: 220, price: "$3,100" },
+      { title: "Sustainable Consumer Products Report", slug: "sustainable-consumer-products", date: "Dec 2023", growth: "+9.4%", pages: 195, price: "$2,800" },
+      { title: "Omnichannel Retail Strategy Analysis", slug: "omnichannel-retail-analysis", date: "Oct 2023", growth: "+7.8%", pages: 180, price: "$2,600" },
+    ],
+  },
+
+  "food-beverage-nutrition": {
+    title: "Food, Beverage & Nutrition",
+    description: "Food processing, beverages, nutrition",
+    overview: "Driven by health awareness, plant-based diets, and functional foods, this industry continues steady global expansion.",
+    keyInsights: [
+      "Plant-based food demand rising",
+      "Functional nutrition growing fast",
+      "Cold-chain logistics improving quality",
+    ],
+    marketSize: "$8.4 Trillion",
+    growthRate: "+6.0% CAGR",
+    topPlayers: ["Nestlé", "Danone", "PepsiCo", "Coca-Cola"],
+    reports: [
+      { title: "Global Functional Foods Market Analysis", slug: "functional-foods-market", date: "Jan 2024", growth: "+11.9%", pages: 240, price: "$3,300" },
+      { title: "Plant-Based Food Industry Outlook", slug: "plant-based-food-industry", date: "Dec 2023", growth: "+15.6%", pages: 205, price: "$3,000" },
+      { title: "Cold Chain in Food Logistics Report", slug: "cold-chain-food-logistics", date: "Oct 2023", growth: "+8.4%", pages: 190, price: "$2,700" },
+    ],
+  },
+
+  "chemicals-materials": {
+    title: "Chemicals & Materials",
+    description: "Specialty chemicals, raw materials",
+    overview: "The market is shifting toward specialty chemicals, sustainable materials, and advanced composites.",
+    keyInsights: [
+      "Green chemistry adoption increasing",
+      "Battery materials driving demand",
+      "Specialty chemicals outperforming commodities",
+    ],
+    marketSize: "$5.7 Trillion",
+    growthRate: "+4.9% CAGR",
+    topPlayers: ["BASF", "Dow", "SABIC", "LyondellBasell"],
+    reports: [
+      { title: "Global Specialty Chemicals Market Report", slug: "specialty-chemicals-market", date: "Jan 2024", growth: "+6.8%", pages: 230, price: "$3,200" },
+      { title: "Sustainable Materials Industry Analysis", slug: "sustainable-materials-industry", date: "Dec 2023", growth: "+10.3%", pages: 210, price: "$3,000" },
+      { title: "Battery Materials Market Outlook", slug: "battery-materials-market", date: "Nov 2023", growth: "+18.1%", pages: 225, price: "$3,400" },
+    ],
+  },
+
+  "technology": {
     title: "Technology",
-    description: "Software, hardware, AI/ML",
-    overview: "The technology sector remains the backbone of digital transformation across industries. Our comprehensive research covers software development trends, hardware innovations, artificial intelligence applications, cloud computing, cybersecurity, and emerging technologies like quantum computing and edge systems.",
+    description: "Software, hardware, digital solutions",
+    overview: "Technology underpins digital transformation across industries, led by AI, cloud computing, and cybersecurity.",
     keyInsights: [
-      "Generative AI investment surged 300% year-over-year",
-      "Cloud infrastructure spending exceeds $200B annually",
-      "Cybersecurity threats driving enterprise security budgets",
-      "Semiconductor supply chains diversifying globally"
+      "AI investment surging globally",
+      "Cloud adoption expanding rapidly",
+      "Cybersecurity spending increasing",
     ],
-    marketSize: "$5.8 Trillion",
-    growthRate: "+9.2% CAGR",
-    topPlayers: ["Apple", "Microsoft", "Google", "Amazon", "NVIDIA"],
+    marketSize: "$6 Trillion",
+    growthRate: "+9.5% CAGR",
+    topPlayers: ["Microsoft", "Apple", "Google", "Amazon", "NVIDIA"],
     reports: [
-      { title: "5G Infrastructure Investment Analysis", slug: "5g-infrastructure-investment", date: "Dec 2023", growth: "+24.8%", pages: 312, price: "$4,200" },
-      { title: "Cybersecurity Solutions Market 2024", slug: "cybersecurity-solutions-2024", date: "Dec 2023", growth: "+21.7%", pages: 267, price: "$3,600" },
-      { title: "Enterprise AI Adoption Report", slug: "enterprise-ai-adoption", date: "Nov 2023", growth: "+35.2%", pages: 198, price: "$3,800" },
-    ]
+      { title: "Global Artificial Intelligence Market Forecast", slug: "ai-market-forecast", date: "Jan 2024", growth: "+29.5%", pages: 280, price: "$3,900" },
+      { title: "Cloud Computing Market Trends", slug: "cloud-computing-market", date: "Dec 2023", growth: "+17.2%", pages: 245, price: "$3,300" },
+      { title: "Cybersecurity Technology Outlook", slug: "cybersecurity-technology-outlook", date: "Nov 2023", growth: "+14.9%", pages: 220, price: "$3,100" },
+    ],
   },
-  "consumer-goods": {
-    title: "Consumer Goods",
-    description: "FMCG, retail, e-commerce",
-    overview: "Consumer goods markets are transforming with shifting purchasing behaviors, sustainability demands, and digital commerce growth. Our research spans fast-moving consumer goods, retail innovations, e-commerce trends, and consumer preference analysis across global markets.",
+
+  "industrial-automation": {
+    title: "Industrial Automation",
+    description: "Manufacturing, robotics, automation",
+    overview: "Factories are adopting smart automation, robotics, and Industry 4.0 solutions to boost productivity.",
     keyInsights: [
-      "Sustainable packaging adoption accelerating rapidly",
-      "Direct-to-consumer brands disrupting traditional retail",
-      "Private label products gaining market share",
-      "Social commerce emerging as key sales channel"
+      "Smart factories gaining adoption",
+      "Robotics deployment increasing",
+      "AI-driven process optimization",
     ],
-    marketSize: "$14.5 Trillion",
-    growthRate: "+5.4% CAGR",
-    topPlayers: ["Procter & Gamble", "Nestlé", "Unilever", "PepsiCo", "Walmart"],
+    marketSize: "$320 Billion",
+    growthRate: "+10.8% CAGR",
+    topPlayers: ["Siemens", "ABB", "Rockwell Automation", "Schneider Electric"],
     reports: [
-      { title: "Sustainable Packaging Market Outlook", slug: "sustainable-packaging-outlook", date: "Jan 2024", growth: "+19.5%", pages: 156, price: "$2,200" },
-      { title: "Plant-Based Food Market Analysis", slug: "plant-based-food-analysis", date: "Nov 2023", growth: "+16.3%", pages: 145, price: "$2,400" },
-      { title: "E-commerce Trends Report 2024", slug: "ecommerce-trends-2024", date: "Oct 2023", growth: "+14.8%", pages: 178, price: "$2,800" },
-    ]
+      { title: "Industry 4.0 Automation Market Report", slug: "industry-4-automation", date: "Jan 2024", growth: "+16.7%", pages: 210, price: "$3,000" },
+      { title: "Industrial Robotics Market Analysis", slug: "industrial-robotics-market", date: "Dec 2023", growth: "+18.9%", pages: 225, price: "$3,400" },
+      { title: "Smart Manufacturing Technologies", slug: "smart-manufacturing-technologies", date: "Oct 2023", growth: "+14.1%", pages: 200, price: "$2,900" },
+    ],
   },
-  energy: {
-    title: "Energy",
-    description: "Oil, gas, renewables",
-    overview: "The energy sector is undergoing its most significant transformation in decades. Our research covers traditional oil and gas markets, renewable energy expansion, energy storage solutions, grid modernization, and the transition to sustainable energy systems globally.",
+
+  "services-utilities": {
+    title: "Services & Utilities",
+    description: "Business services, utilities",
+    overview: "Utilities and service providers are modernizing infrastructure through digital platforms and smart systems.",
     keyInsights: [
-      "Renewable capacity additions outpacing fossil fuels",
-      "Battery storage costs declining 15% annually",
-      "Hydrogen economy investments gaining momentum",
-      "Energy security concerns reshaping global policies"
+      "Smart utility grids expanding",
+      "Outsourced services growing",
+      "Sustainability initiatives rising",
     ],
-    marketSize: "$8.1 Trillion",
-    growthRate: "+6.1% CAGR",
-    topPlayers: ["ExxonMobil", "Shell", "Chevron", "NextEra Energy", "TotalEnergies"],
+    marketSize: "$6.2 Trillion",
+    growthRate: "+4.5% CAGR",
+    topPlayers: ["Veolia", "ENGIE", "E.ON", "Suez"],
     reports: [
-      { title: "Renewable Energy Storage Solutions", slug: "renewable-energy-storage", date: "Dec 2023", growth: "+22.1%", pages: 178, price: "$3,100" },
-      { title: "Global Solar Market Analysis", slug: "solar-market-analysis", date: "Nov 2023", growth: "+18.9%", pages: 203, price: "$2,900" },
-      { title: "Hydrogen Economy Outlook 2024", slug: "hydrogen-economy-2024", date: "Oct 2023", growth: "+28.4%", pages: 167, price: "$3,400" },
-    ]
+      { title: "Smart Utilities Market Outlook", slug: "smart-utilities-market", date: "Jan 2024", growth: "+9.6%", pages: 215, price: "$3,000" },
+      { title: "Global Business Services Industry Report", slug: "business-services-industry", date: "Dec 2023", growth: "+6.2%", pages: 195, price: "$2,700" },
+      { title: "Digital Transformation in Utilities", slug: "digital-transformation-utilities", date: "Oct 2023", growth: "+8.4%", pages: 185, price: "$2,600" },
+    ],
   },
-  finance: {
-    title: "Financial Services",
-    description: "Banking, insurance, fintech",
-    overview: "Financial services continue to evolve with digital banking innovations, fintech disruption, and regulatory changes. Our research covers banking transformation, insurance technology, payment solutions, wealth management trends, and emerging financial technologies.",
+
+  "pharmaceutical": {
+    title: "Pharmaceutical",
+    description: "Drugs, therapeutics, life sciences",
+    overview: "Pharma innovation is driven by biologics, personalized medicine, and accelerated drug development.",
     keyInsights: [
-      "Embedded finance reshaping customer experiences",
-      "Digital-only banks capturing younger demographics",
-      "Cryptocurrency regulations taking shape globally",
-      "Open banking APIs driving innovation"
+      "Biologics dominating pipelines",
+      "AI accelerating drug discovery",
+      "Emerging markets driving growth",
     ],
-    marketSize: "$28.5 Trillion",
-    growthRate: "+6.8% CAGR",
-    topPlayers: ["JPMorgan Chase", "Bank of America", "ICBC", "Visa", "Mastercard"],
+    marketSize: "$1.7 Trillion",
+    growthRate: "+6.4% CAGR",
+    topPlayers: ["Pfizer", "Roche", "Novartis", "Johnson & Johnson"],
     reports: [
-      { title: "Fintech Payment Solutions Market", slug: "fintech-payment-solutions", date: "Dec 2023", growth: "+26.3%", pages: 234, price: "$3,800" },
-      { title: "Digital Banking Transformation Report", slug: "digital-banking-2024", date: "Nov 2023", growth: "+19.7%", pages: 189, price: "$3,200" },
-      { title: "InsurTech Market Analysis", slug: "insurtech-market-2024", date: "Oct 2023", growth: "+22.8%", pages: 156, price: "$2,900" },
-    ]
+      { title: "Global Pharmaceutical Market Forecast", slug: "pharmaceutical-market-forecast", date: "Jan 2024", growth: "+7.9%", pages: 260, price: "$3,800" },
+      { title: "Biologics & Biosimilars Market Report", slug: "biologics-biosimilars-market", date: "Dec 2023", growth: "+11.5%", pages: 235, price: "$3,400" },
+      { title: "AI in Drug Discovery Analysis", slug: "ai-drug-discovery", date: "Nov 2023", growth: "+22.1%", pages: 220, price: "$3,100" },
+    ],
   },
-  automotive: {
-    title: "Automotive",
-    description: "EVs, components, mobility",
-    overview: "The automotive industry is experiencing rapid transformation with electric vehicle adoption, autonomous driving development, and mobility services innovation. Our research covers EV market dynamics, battery technology, automotive components, and future mobility trends.",
+
+  "healthcare-it-services": {
+    title: "Healthcare IT & Services",
+    description: "Health tech, medical services",
+    overview: "Digital health platforms, telemedicine, and healthcare analytics are transforming care delivery.",
     keyInsights: [
-      "EV sales exceeding 20% of new vehicle sales globally",
-      "Battery technology costs declining rapidly",
-      "Autonomous driving reaching Level 3 deployment",
-      "Software-defined vehicles becoming industry standard"
+      "Telehealth adoption remains high",
+      "Electronic health records expanding",
+      "AI diagnostics gaining approvals",
     ],
-    marketSize: "$3.8 Trillion",
-    growthRate: "+8.4% CAGR",
-    topPlayers: ["Toyota", "Volkswagen", "Tesla", "General Motors", "BYD"],
+    marketSize: "$420 Billion",
+    growthRate: "+12.2% CAGR",
+    topPlayers: ["Epic Systems", "Cerner", "Philips", "GE HealthCare"],
     reports: [
-      { title: "Electric Vehicle Battery Technology Report", slug: "ev-battery-technology-2024", date: "Jan 2024", growth: "+31.2%", pages: 198, price: "$2,800" },
-      { title: "Autonomous Vehicle Market Analysis", slug: "autonomous-vehicle-2024", date: "Nov 2023", growth: "+25.6%", pages: 223, price: "$3,600" },
-      { title: "EV Charging Infrastructure Report", slug: "ev-charging-infrastructure", date: "Oct 2023", growth: "+28.9%", pages: 167, price: "$2,400" },
-    ]
+      { title: "Global Healthcare IT Market Analysis", slug: "healthcare-it-market", date: "Jan 2024", growth: "+15.8%", pages: 240, price: "$3,300" },
+      { title: "Telemedicine Platforms Market Report", slug: "telemedicine-platforms", date: "Dec 2023", growth: "+19.4%", pages: 210, price: "$3,000" },
+      { title: "Healthcare Data Analytics Outlook", slug: "healthcare-data-analytics", date: "Oct 2023", growth: "+13.6%", pages: 195, price: "$2,800" },
+    ],
   },
-  aerospace: {
+
+  "medical-devices-consumables": {
+    title: "Medical Devices & Consumables",
+    description: "Consumables, disposables, devices",
+    overview: "Rising healthcare demand and aging populations are driving consumables and disposable device growth.",
+    keyInsights: [
+      "Single-use devices demand rising",
+      "Infection control boosting sales",
+      "Hospital procurement expanding",
+    ],
+    marketSize: "$520 Billion",
+    growthRate: "+7.1% CAGR",
+    topPlayers: ["Medtronic", "3M", "Becton Dickinson", "Cardinal Health"],
+    reports: [
+      { title: "Medical Consumables Market Analysis", slug: "medical-consumables-market", date: "Jan 2024", growth: "+8.9%", pages: 215, price: "$3,000" },
+      { title: "Single-Use Medical Devices Outlook", slug: "single-use-medical-devices", date: "Dec 2023", growth: "+10.7%", pages: 205, price: "$2,900" },
+      { title: "Hospital Supplies Procurement Trends", slug: "hospital-supplies-procurement", date: "Oct 2023", growth: "+6.5%", pages: 180, price: "$2,600" },
+    ],
+  },
+
+  "medical-devices": {
+    title: "Medical Devices",
+    description: "Diagnostic and therapeutic devices",
+    overview: "Medical devices innovation is fueled by imaging, diagnostics, and minimally invasive procedures.",
+    keyInsights: [
+      "AI-powered diagnostics expanding",
+      "Home healthcare devices growing",
+      "Regulatory approvals increasing",
+    ],
+    marketSize: "$610 Billion",
+    growthRate: "+6.9% CAGR",
+    topPlayers: ["Medtronic", "GE HealthCare", "Siemens Healthineers"],
+    reports: [
+      { title: "Global Medical Devices Market Forecast", slug: "medical-devices-market-forecast", date: "Jan 2024", growth: "+7.4%", pages: 255, price: "$3,500" },
+      { title: "Diagnostic Imaging Equipment Report", slug: "diagnostic-imaging-equipment", date: "Dec 2023", growth: "+9.1%", pages: 230, price: "$3,200" },
+      { title: "Minimally Invasive Surgery Devices", slug: "minimally-invasive-devices", date: "Oct 2023", growth: "+11.3%", pages: 210, price: "$3,000" },
+    ],
+  },
+
+  "it-security-software": {
+    title: "IT Security & Software",
+    description: "Cybersecurity, enterprise software",
+    overview: "Cyber threats are driving sustained demand for advanced security software and enterprise platforms.",
+    keyInsights: [
+      "Zero-trust adoption increasing",
+      "Cloud security spending rising",
+      "AI-driven threat detection",
+    ],
+    marketSize: "$290 Billion",
+    growthRate: "+11.5% CAGR",
+    topPlayers: ["Palo Alto Networks", "Fortinet", "CrowdStrike", "Cisco"],
+    reports: [
+      { title: "Global Cybersecurity Software Market", slug: "cybersecurity-software-market", date: "Jan 2024", growth: "+16.8%", pages: 245, price: "$3,400" },
+      { title: "Zero Trust Security Frameworks Report", slug: "zero-trust-security", date: "Dec 2023", growth: "+21.5%", pages: 215, price: "$3,100" },
+      { title: "Enterprise Software Market Outlook", slug: "enterprise-software-market", date: "Oct 2023", growth: "+12.9%", pages: 200, price: "$2,900" },
+    ],
+  },
+
+  "electronics-semiconductor": {
+    title: "Electronics & Semiconductors",
+    description: "Chips, electronic components",
+    overview: "Semiconductors power modern electronics, AI systems, and automotive technologies.",
+    keyInsights: [
+      "AI chips driving demand",
+      "Supply chain diversification ongoing",
+      "Advanced nodes gaining investment",
+    ],
+    marketSize: "$650 Billion",
+    growthRate: "+9.0% CAGR",
+    topPlayers: ["TSMC", "Intel", "Samsung", "Qualcomm"],
+    reports: [
+      { title: "Global Semiconductor Market Analysis", slug: "semiconductor-market-analysis", date: "Jan 2024", growth: "+13.6%", pages: 260, price: "$3,700" },
+      { title: "AI Chipsets Industry Outlook", slug: "ai-chipsets-industry", date: "Dec 2023", growth: "+24.8%", pages: 235, price: "$3,500" },
+      { title: "Electronics Supply Chain Trends", slug: "electronics-supply-chain", date: "Oct 2023", growth: "+8.7%", pages: 200, price: "$2,800" },
+    ],
+  },
+
+  "agriculture": {
+    title: "Agriculture",
+    description: "Farming, agritech, crop science",
+    overview: "Agriculture is adopting precision farming, smart irrigation, and biotech solutions.",
+    keyInsights: [
+      "Agri-tech adoption increasing",
+      "Sustainable farming gaining focus",
+      "Yield optimization through data",
+    ],
+    marketSize: "$4.1 Trillion",
+    growthRate: "+5.3% CAGR",
+    topPlayers: ["John Deere", "Bayer", "Syngenta", "Corteva"],
+    reports: [
+      { title: "Precision Agriculture Market Report", slug: "precision-agriculture-market", date: "Jan 2024", growth: "+12.4%", pages: 225, price: "$3,100" },
+      { title: "AgriTech Innovations Outlook", slug: "agritech-innovations", date: "Dec 2023", growth: "+15.2%", pages: 210, price: "$2,900" },
+      { title: "Crop Protection Chemicals Market", slug: "crop-protection-chemicals", date: "Oct 2023", growth: "+6.8%", pages: 195, price: "$2,700" },
+    ],
+  },
+
+  "packaging-transport": {
+    title: "Packaging & Transport",
+    description: "Packaging, logistics solutions",
+    overview: "Growth is driven by e-commerce, sustainable packaging, and global trade flows.",
+    keyInsights: [
+      "Eco-friendly packaging demand rising",
+      "E-commerce logistics expanding",
+      "Automation improving warehousing",
+    ],
+    marketSize: "$1.1 Trillion",
+    growthRate: "+6.6% CAGR",
+    topPlayers: ["Amcor", "International Paper", "DS Smith"],
+    reports: [
+      { title: "Sustainable Packaging Market Report", slug: "sustainable-packaging-market", date: "Jan 2024", growth: "+11.7%", pages: 220, price: "$3,000" },
+      { title: "E-commerce Logistics Industry Analysis", slug: "ecommerce-logistics-industry", date: "Dec 2023", growth: "+14.3%", pages: 205, price: "$2,900" },
+      { title: "Warehouse Automation Technologies", slug: "warehouse-automation-technologies", date: "Oct 2023", growth: "+13.1%", pages: 195, price: "$2,800" },
+    ],
+  },
+
+  "energy-power": {
+    title: "Energy & Power",
+    description: "Renewables, oil & gas, power generation",
+    overview: "Energy markets are transitioning toward renewables while balancing global energy security.",
+    keyInsights: [
+      "Renewables outpacing fossil fuels",
+      "Energy storage costs falling",
+      "Hydrogen investments growing",
+    ],
+    marketSize: "$9 Trillion",
+    growthRate: "+6.3% CAGR",
+    topPlayers: ["Shell", "ExxonMobil", "NextEra Energy", "TotalEnergies"],
+    reports: [
+      { title: "Global Renewable Energy Market Outlook", slug: "renewable-energy-market", date: "Jan 2024", growth: "+14.9%", pages: 275, price: "$3,800" },
+      { title: "Energy Storage Systems Market", slug: "energy-storage-systems", date: "Dec 2023", growth: "+18.6%", pages: 240, price: "$3,400" },
+      { title: "Hydrogen Energy Industry Analysis", slug: "hydrogen-energy-industry", date: "Oct 2023", growth: "+21.2%", pages: 230, price: "$3,300" },
+    ],
+  },
+
+  "construction-real-estate": {
+    title: "Construction & Real Estate",
+    description: "Infrastructure, real estate",
+    overview: "Urbanization, smart cities, and sustainable buildings are shaping construction markets.",
+    keyInsights: [
+      "Green buildings gaining demand",
+      "Infrastructure spending increasing",
+      "PropTech adoption rising",
+    ],
+    marketSize: "$13 Trillion",
+    growthRate: "+4.7% CAGR",
+    topPlayers: ["Vinci", "Larsen & Toubro", "CBRE", "Skanska"],
+    reports: [
+      { title: "Global Construction Market Forecast", slug: "construction-market-forecast", date: "Jan 2024", growth: "+5.6%", pages: 260, price: "$3,500" },
+      { title: "Smart Cities Infrastructure Report", slug: "smart-cities-infrastructure", date: "Dec 2023", growth: "+9.8%", pages: 230, price: "$3,100" },
+      { title: "PropTech Market Trends Analysis", slug: "proptech-market-trends", date: "Oct 2023", growth: "+12.5%", pages: 205, price: "$2,900" },
+    ],
+  },
+
+  "daily-necessities": {
+    title: "Daily Necessities",
+    description: "Household essentials",
+    overview: "Daily-use products remain resilient with steady demand across economic cycles.",
+    keyInsights: [
+      "Private labels expanding",
+      "Price sensitivity increasing",
+      "Supply chain efficiency critical",
+    ],
+    marketSize: "$3.2 Trillion",
+    growthRate: "+4.1% CAGR",
+    topPlayers: ["Unilever", "P&G", "Reckitt"],
+    reports: [
+      { title: "Household Essentials Market Analysis", slug: "household-essentials-market", date: "Jan 2024", growth: "+4.9%", pages: 210, price: "$2,800" },
+      { title: "Private Label Consumer Goods Report", slug: "private-label-consumer-goods", date: "Dec 2023", growth: "+7.3%", pages: 195, price: "$2,600" },
+      { title: "FMCG Supply Chain Optimization", slug: "fmcg-supply-chain", date: "Oct 2023", growth: "+6.1%", pages: 180, price: "$2,400" },
+    ],
+  },
+
+  "aerospace-defense": {
     title: "Aerospace & Defense",
     description: "Aviation, space, defense",
-    overview: "The aerospace and defense sector continues to grow with increasing air travel demand, space commercialization, and defense modernization. Our research covers commercial aviation, space exploration, defense systems, and emerging aerospace technologies.",
+    overview: "Commercial aviation recovery, space commercialization, and defense modernization drive growth.",
     keyInsights: [
-      "Commercial space launches increasing 40% annually",
-      "Sustainable aviation fuel investment accelerating",
-      "Defense spending rising amid geopolitical tensions",
-      "Urban air mobility approaching commercial viability"
+      "Space launches increasing",
+      "Defense budgets rising",
+      "Sustainable aviation fuel adoption",
     ],
-    marketSize: "$1.2 Trillion",
-    growthRate: "+5.7% CAGR",
-    topPlayers: ["Boeing", "Airbus", "Lockheed Martin", "Raytheon", "SpaceX"],
+    marketSize: "$1.3 Trillion",
+    growthRate: "+5.8% CAGR",
+    topPlayers: ["Boeing", "Airbus", "Lockheed Martin", "SpaceX"],
     reports: [
-      { title: "Commercial Space Industry Report", slug: "commercial-space-2024", date: "Dec 2023", growth: "+18.4%", pages: 189, price: "$3,200" },
-      { title: "Defense Technology Market Analysis", slug: "defense-technology-2024", date: "Nov 2023", growth: "+12.8%", pages: 245, price: "$4,100" },
-      { title: "Sustainable Aviation Report", slug: "sustainable-aviation-2024", date: "Oct 2023", growth: "+21.3%", pages: 156, price: "$2,800" },
-    ]
+      { title: "Global Aerospace Market Outlook", slug: "aerospace-market-outlook", date: "Jan 2024", growth: "+6.7%", pages: 270, price: "$3,700" },
+      { title: "Defense Modernization Programs Report", slug: "defense-modernization-programs", date: "Dec 2023", growth: "+8.9%", pages: 245, price: "$3,400" },
+      { title: "Commercial Space Industry Analysis", slug: "commercial-space-industry", date: "Oct 2023", growth: "+19.5%", pages: 230, price: "$3,300" },
+    ],
   },
-  "real-estate": {
-    title: "Real Estate",
-    description: "Commercial, residential",
-    overview: "Real estate markets are evolving with changing work patterns, urbanization trends, and technology integration. Our research covers commercial property dynamics, residential market trends, PropTech innovations, and real estate investment analysis.",
+
+  "financial-services": {
+    title: "Financial Services",
+    description: "Banking, insurance, fintech",
+    overview: "Digital banking, fintech, and embedded finance are transforming financial ecosystems.",
     keyInsights: [
-      "Hybrid work reshaping office space demand",
-      "Industrial real estate benefiting from e-commerce",
-      "PropTech streamlining property transactions",
-      "Sustainable buildings commanding premium rents"
+      "Digital payments dominating",
+      "Fintech adoption accelerating",
+      "Open banking expanding",
     ],
-    marketSize: "$4.2 Trillion",
-    growthRate: "+4.8% CAGR",
-    topPlayers: ["CBRE", "JLL", "Prologis", "Simon Property Group", "AvalonBay"],
+    marketSize: "$29 Trillion",
+    growthRate: "+6.7% CAGR",
+    topPlayers: ["JPMorgan Chase", "ICBC", "Visa", "Mastercard"],
     reports: [
-      { title: "Commercial Real Estate Outlook 2024", slug: "commercial-real-estate-2024", date: "Dec 2023", growth: "+8.6%", pages: 178, price: "$2,600" },
-      { title: "Residential Market Trends Report", slug: "residential-trends-2024", date: "Nov 2023", growth: "+6.2%", pages: 145, price: "$2,200" },
-      { title: "PropTech Innovation Analysis", slug: "proptech-innovation-2024", date: "Oct 2023", growth: "+24.5%", pages: 134, price: "$2,400" },
-    ]
+      { title: "Global FinTech Market Analysis", slug: "fintech-market-analysis", date: "Jan 2024", growth: "+20.4%", pages: 260, price: "$3,600" },
+      { title: "Digital Banking Transformation Report", slug: "digital-banking-transformation", date: "Dec 2023", growth: "+14.8%", pages: 230, price: "$3,200" },
+      { title: "Open Banking Ecosystem Outlook", slug: "open-banking-ecosystem", date: "Oct 2023", growth: "+16.2%", pages: 215, price: "$3,000" },
+    ],
   },
 };
 
-export const getIndustryBySlug = (slug: string): Industry | undefined => {
-  return industries.find(industry => industry.slug === slug);
-};
 
-export const getIndustryDetailBySlug = (slug: string): IndustryDetail | undefined => {
-  return industryDetails[slug];
-};
+/* =====================================================
+   HELPERS
+===================================================== */
+export const getIndustryBySlug = (slug: string): Industry | undefined =>
+  industries.find((industry) => industry.slug === slug);
+
+export const getIndustryDetailBySlug = (slug: string): IndustryDetail | undefined =>
+  industryDetails[slug];

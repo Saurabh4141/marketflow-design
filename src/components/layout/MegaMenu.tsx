@@ -1,14 +1,74 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { 
+  Car,
+  ShoppingBag,
+  UtensilsCrossed,
+  FlaskConical,
+  Cpu,
+  Factory,
+  Wrench,
+  Pill,
+  Hospital,
+  Syringe,
+  Stethoscope,
+  Shield,
+  CircuitBoard,
+  Wheat,
+  Package,
+  Zap,
+  Building2,
+  Home,
+  PieChart,
+  BarChart3,
+  Brain,
+  TrendingUp,
+  Lightbulb,
+  DollarSign,
+  Heart,
+  Target,
+  MessageCircle,
+  ArrowRight
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { industries } from "@/data/industries";
-import { services } from "@/data/services";
 
 interface MegaMenuProps {
   type: "industries" | "services";
   isOpen: boolean;
   onClose: () => void;
 }
+
+const industries = [
+  { icon: Car, title: "Automobile & Transportation", description: "Vehicles, logistics, mobility solutions", href: "/industry/automobile-transportation" },
+  { icon: ShoppingBag, title: "Consumer Products", description: "Retail, lifestyle, consumer goods", href: "/industry/consumer-products" },
+  { icon: UtensilsCrossed, title: "Food, Beverage & Nutrition", description: "Food processing, beverages, nutrition", href: "/industry/food-beverage-nutrition" },
+  { icon: FlaskConical, title: "Chemicals & Materials", description: "Specialty chemicals, raw materials", href: "/industry/chemicals-materials" },
+  { icon: Cpu, title: "Technology", description: "Software, hardware, digital solutions", href: "/industry/technology" },
+  { icon: Factory, title: "Industrial Automation", description: "Manufacturing, robotics, automation", href: "/industry/industrial-automation" },
+  { icon: Wrench, title: "Services & Utilities", description: "Business services, utilities", href: "/industry/services-utilities" },
+  { icon: Pill, title: "Pharmaceutical", description: "Drugs, therapeutics, life sciences", href: "/industry/pharmaceutical" },
+  { icon: Hospital, title: "Healthcare IT & Services", description: "Health tech, medical services", href: "/industry/healthcare-it-services" },
+  { icon: Syringe, title: "Medical Devices Consumables", description: "Disposables, consumable devices", href: "/industry/medical-devices-consumables" },
+  { icon: Stethoscope, title: "Medical Devices", description: "Equipment, diagnostic devices", href: "/industry/medical-devices" },
+  { icon: Shield, title: "IT Security & Software", description: "Cybersecurity, enterprise software", href: "/industry/it-security-software" },
+  { icon: CircuitBoard, title: "Electronics-Semiconductor", description: "Chips, components, electronics", href: "/industry/electronics-semiconductor" },
+  { icon: Wheat, title: "Agriculture", description: "Farming, agritech, crop science", href: "/industry/agriculture" },
+  { icon: Package, title: "Packaging & Transport", description: "Logistics, packaging solutions", href: "/industry/packaging-transport" },
+  { icon: Zap, title: "Energy & Power", description: "Power generation, renewables, oil & gas", href: "/industry/energy-power" },
+  { icon: Building2, title: "Construction", description: "Infrastructure, real estate, construction", href: "/industry/construction" },
+  { icon: Home, title: "Daily-Necessities", description: "Household essentials, daily products", href: "/industry/daily-necessities" },
+];
+
+const services = [
+  { icon: PieChart, title: "Market Segmentation Analysis", description: "Identify and understand target segments", href: "/services/market-segmentation-analysis" },
+  { icon: BarChart3, title: "Competitor Analysis", description: "Stay ahead of competition", href: "/services/competitor-analysis" },
+  { icon: Brain, title: "Consumer Behavior Analysis", description: "Understand customer decisions", href: "/services/consumer-behavior-analysis" },
+  { icon: TrendingUp, title: "Industry Trends & Forecasting", description: "Predict market shifts and opportunities", href: "/services/industry-trends-forecasting" },
+  { icon: Lightbulb, title: "Product and Brand Research", description: "Product insights and brand perception", href: "/services/product-brand-research" },
+  { icon: DollarSign, title: "Pricing Strategy Research", description: "Optimize pricing for profitability", href: "/services/pricing-strategy-research" },
+  { icon: Heart, title: "Customer Satisfaction and Loyalty Research", description: "Measure NPS and customer loyalty", href: "/services/customer-satisfaction-loyalty-research" },
+  { icon: Target, title: "Market Opportunity Identification", description: "Discover growth opportunities", href: "/services/market-opportunity-identification" },
+  { icon: MessageCircle, title: "Social Media and Sentiment Analysis", description: "Monitor brand perception online", href: "/services/social-media-sentiment-analysis" },
+];
 
 export const MegaMenu = ({ type, isOpen, onClose }: MegaMenuProps) => {
   const items = type === "industries" ? industries : services;
@@ -22,7 +82,7 @@ export const MegaMenu = ({ type, isOpen, onClose }: MegaMenuProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-[88px] bg-foreground/20 backdrop-blur-sm z-40"
+            className="fixed inset-0 top-[110px] bg-foreground/20 backdrop-blur-sm z-40"
             onClick={onClose}
           />
           
