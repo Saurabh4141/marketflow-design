@@ -156,65 +156,121 @@ const Industry = () => {
           </div>
         </section>
 
+        {/* Search & Filter for Industry Reports */}
+        <section className="py-8">
+          <div className="container mx-auto px-4">
+            <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    placeholder="Search reports..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-12 h-12 rounded-xl"
+                  />
+                </div>
+                <Button variant="outline" size="lg" className="gap-2">
+                  <Filter className="w-4 h-4" />
+                  Advanced Filters
+                </Button>
+              </div>
+
+              {/* Category Pills */}
+              <nav aria-label="Industry categories" className="flex flex-wrap gap-2 mt-6">
+                {categories.map((category) => (
+                  <Link
+                    key={category}
+                    to={category === "All Reports" ? "/industry" : `/industry/${industries.find(i => i.title === category)?.slug || ""}`}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                      (category === detail.title || (category === "All Reports" && activeCategory === "All Reports"))
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    )}
+                  >
+                    {category}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </section>
+
         {/* Reports for this Industry */}
         <section className="py-16">
           <div className="container mx-auto px-4">
-            <AnimatedSection>
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                  {detail.title} Reports
-                </h2>
-                <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all">
-                  View All Reports <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            </AnimatedSection>
-
-            <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {detail.reports.map((report) => (
-                <StaggerItem key={report.slug}>
-                  <Link to={`/reports/${report.slug}`} className="block h-full">
-                    <div className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
-                      <div className="flex items-start justify-between gap-4 mb-4">
-                        <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[detail.title])}>
-                          {detail.title}
-                        </span>
-                        <div className="flex items-center gap-1 text-emerald-600 text-sm font-medium">
-                          <TrendingUp className="w-4 h-4" />
-                          {report.growth}
-                        </div>
+            {(() => {
+              const filteredIndustryReports = detail.reports.filter((report) =>
+                report.title.toLowerCase().includes(searchQuery.toLowerCase())
+              );
+              
+              return (
+                <>
+                  <AnimatedSection>
+                    <div className="flex items-center justify-between mb-8">
+                      <div>
+                        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                          {detail.title} Reports
+                        </h2>
+                        <p className="text-muted-foreground mt-1">
+                          Showing <span className="font-medium text-foreground">{filteredIndustryReports.length}</span> reports
+                        </p>
                       </div>
-
-                      <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                        {report.title}
-                      </h3>
-
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                        <span className="flex items-center gap-1.5">
-                          <Clock className="w-4 h-4" />
-                          {report.date}
-                        </span>
-                        <span>{report.pages} pages</span>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-4 border-t border-border">
-                        <span className="font-display text-xl font-bold text-foreground">
-                          {report.price}
-                        </span>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button variant="default" size="sm">
-                            <Download className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
+                      <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all">
+                        View All Reports <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </div>
-                  </Link>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+                  </AnimatedSection>
+
+                  <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredIndustryReports.map((report) => (
+                      <StaggerItem key={report.slug}>
+                        <Link to={`/reports/${report.slug}`} className="block h-full">
+                          <article className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
+                            <div className="flex items-start justify-between gap-4 mb-4">
+                              <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[detail.title])}>
+                                {detail.title}
+                              </span>
+                              <div className="flex items-center gap-1 text-emerald-600 text-sm font-medium">
+                                <TrendingUp className="w-4 h-4" />
+                                {report.growth}
+                              </div>
+                            </div>
+
+                            <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
+                              {report.title}
+                            </h3>
+
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                              <span className="flex items-center gap-1.5">
+                                <Clock className="w-4 h-4" />
+                                {report.date}
+                              </span>
+                              <span>{report.pages} pages</span>
+                            </div>
+
+                            <div className="flex items-center justify-between pt-4 border-t border-border">
+                              <span className="font-display text-xl font-bold text-foreground">
+                                {report.price}
+                              </span>
+                              <div className="flex gap-2">
+                                <Button variant="outline" size="sm">
+                                  <Eye className="w-4 h-4" />
+                                </Button>
+                                <Button variant="default" size="sm">
+                                  <Download className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </article>
+                        </Link>
+                      </StaggerItem>
+                    ))}
+                  </StaggerContainer>
+                </>
+              );
+            })()}
           </div>
         </section>
 
