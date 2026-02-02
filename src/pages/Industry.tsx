@@ -161,7 +161,7 @@ const Industry = () => {
         }
       />
 
-            {/* Search & Filter */}
+      {/* Search & Filter */}
       <section className={cn("py-8 relative z-10", !slug && "-mt-10")}>
         <div className="container mx-auto px-4">
           <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
@@ -256,8 +256,6 @@ const Industry = () => {
           </div>
         </section>
       )}
-
-
 
       {/* Reports Grid */}
       <section className="py-16">
