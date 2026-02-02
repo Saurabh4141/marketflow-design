@@ -161,6 +161,54 @@ const Industry = () => {
         }
       />
 
+            {/* Search & Filter */}
+      <section className={cn("py-8 relative z-10", !slug && "-mt-10")}>
+        <div className="container mx-auto px-4">
+          <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search reports..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="pl-12 h-12 rounded-xl"
+                />
+              </div>
+              <Button variant="outline" size="lg" className="gap-2">
+                <Filter className="w-4 h-4" />
+                Advanced Filters
+              </Button>
+            </div>
+
+            {/* Category Pills */}
+            <nav aria-label="Industry categories" className="flex flex-wrap gap-2 mt-6">
+              {categories.map((category) => {
+                const categorySlug = category === "All Reports" 
+                  ? null 
+                  : industries.find(i => i.title === category)?.slug;
+                const isActive = category === activeCategory;
+                
+                return (
+                  <Link
+                    key={category}
+                    to={category === "All Reports" ? "/industry" : `/industry/${categorySlug}`}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    )}
+                  >
+                    {category}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+      </section>
+
       {/* Key Stats - Only show for specific industry */}
       {slug && detail && (
         <section className="py-12 -mt-8 relative z-10">
@@ -209,53 +257,7 @@ const Industry = () => {
         </section>
       )}
 
-      {/* Search & Filter */}
-      <section className={cn("py-8 relative z-10", !slug && "-mt-10")}>
-        <div className="container mx-auto px-4">
-          <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search reports..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="pl-12 h-12 rounded-xl"
-                />
-              </div>
-              <Button variant="outline" size="lg" className="gap-2">
-                <Filter className="w-4 h-4" />
-                Advanced Filters
-              </Button>
-            </div>
 
-            {/* Category Pills */}
-            <nav aria-label="Industry categories" className="flex flex-wrap gap-2 mt-6">
-              {categories.map((category) => {
-                const categorySlug = category === "All Reports" 
-                  ? null 
-                  : industries.find(i => i.title === category)?.slug;
-                const isActive = category === activeCategory;
-                
-                return (
-                  <Link
-                    key={category}
-                    to={category === "All Reports" ? "/industry" : `/industry/${categorySlug}`}
-                    className={cn(
-                      "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                      isActive
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    )}
-                  >
-                    {category}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      </section>
 
       {/* Reports Grid */}
       <section className="py-16">

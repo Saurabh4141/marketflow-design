@@ -2,44 +2,63 @@ import { useState } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { Send, MapPin, Phone, Mail, Clock, CheckCircle2 } from "lucide-react";
+import { Send, MapPin, Phone, Mail, Clock, CheckCircle2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Link } from "react-router-dom";
+import { companyInfo } from "@/data/companyInfo";
 
 const contactInfo = [
   {
     icon: MapPin,
     label: "Headquarters",
-    value: "Empire State Building, NYC",
-    subValue: "New York, NY 10001, USA",
+    value: companyInfo.headquarter.address + ", " + companyInfo.headquarter.city,
+    subValue: companyInfo.headquarter.state + " " + companyInfo.headquarter.zip,
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (234) 567-890",
-    subValue: "Mon-Fri 9am-6pm EST",
+    value: companyInfo.phone,
+    subValue: companyInfo.businessHours.days.split(" - ")[0] + "-" + companyInfo.businessHours.days.split(" - ")[1] + " " + companyInfo.businessHours.hours.split(" - ")[0] + "-" + companyInfo.businessHours.hours.split(" - ")[1],
   },
   {
     icon: Mail,
     label: "Email",
-    value: "info@coremarketresearch.com",
-    subValue: "24/7 Support Available",
+    value: companyInfo.email,
+    subValue: companyInfo.supportTime,
   },
   {
     icon: Clock,
     label: "Business Hours",
-    value: "Monday - Friday",
-    subValue: "9:00 AM - 6:00 PM EST",
+    value: companyInfo.businessHours.days,
+    subValue: companyInfo.businessHours.hours,
   },
 ];
 
-const offices = [
-  { city: "New York", country: "USA", address: "Empire State Building" },
-  { city: "London", country: "UK", address: "Canary Wharf" },
-  { city: "Singapore", country: "Singapore", address: "Marina Bay" },
-  { city: "Mumbai", country: "India", address: "Bandra Kurla Complex" },
+const engagementSteps = [
+  {
+    title: "Initial Consultation",
+    subtitle: "Understand your objectives",
+    description: "We discuss your business goals, challenges, and research requirements."
+  },
+  {
+    title: "Scope & Proposal",
+    subtitle: "Clear deliverables",
+    description: "We define project scope, timelines, methodology, and pricing transparently."
+  },
+  {
+    title: "Research Execution",
+    subtitle: "Data-driven insights",
+    description: "Our analysts conduct primary and secondary research with rigorous validation."
+  },
+  {
+    title: "Insights & Delivery",
+    subtitle: "Actionable outcomes",
+    description: "You receive structured insights, forecasts, and strategic recommendations."
+  }
 ];
+
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -60,6 +79,18 @@ const Contact = () => {
 
   return (
     <PageLayout>
+
+       {/* Breadcrumb */}
+      <div className="bg-secondary/30 border-b border-border">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-foreground font-medium">Contact us</span>
+          </nav>
+        </div>
+      </div>
+
       <PageHero
         badge="Contact Us"
         title="Let's Start a Conversation"
@@ -217,17 +248,17 @@ const Contact = () => {
             <AnimatedSection delay={0.2} direction="right" className="lg:col-span-2">
               <div className="p-8 rounded-3xl bg-secondary/50 h-full">
                 <h3 className="font-display text-xl font-bold text-foreground mb-6">
-                  Global Offices
+                  How We Work
                 </h3>
                 <div className="space-y-6">
-                  {offices.map((office) => (
+                  {engagementSteps.map((step) => (
                     <div
-                      key={office.city}
+                      key={step.title}
                       className="p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors"
                     >
-                      <h4 className="font-semibold text-foreground">{office.city}</h4>
-                      <p className="text-sm text-muted-foreground">{office.country}</p>
-                      <p className="text-sm text-muted-foreground">{office.address}</p>
+                      <h4 className="font-semibold text-foreground">{step.title}</h4>
+                      <p className="text-sm text-muted-foreground">{step.subtitle}</p>
+                      <p className="text-sm text-muted-foreground">{step.description}</p>
                     </div>
                   ))}
                 </div>

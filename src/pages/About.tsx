@@ -1,7 +1,7 @@
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { Award, Users, Globe, Target, CheckCircle2 } from "lucide-react";
+import { Award, Users, Globe, Target, CheckCircle2, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -45,6 +45,18 @@ const team = [
 const About = () => {
   return (
     <PageLayout>
+
+       {/* Breadcrumb */}
+      <div className="bg-secondary/30 border-b border-border">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-foreground font-medium">About</span>
+          </nav>
+        </div>
+      </div>
+
       <PageHero
         badge="About Us"
         title="Your Trusted Partner in Market Intelligence"

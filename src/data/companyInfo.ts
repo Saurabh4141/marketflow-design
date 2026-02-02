@@ -22,12 +22,12 @@ export interface CompanyInfo {
 
 const createOffice = (name: string): OfficeLocation => ({
   name,
-  address: "Empire State Building",
-  city: "NYC",
-  state: "NY",
-  zip: "10001",
-  country: "USA",
-  fullAddress: "Empire State Building, NYC New York, NY 10001, USA",
+  address: "Ganesh Vandan",
+  city: "Pune",
+  state: "Maharashtra",
+  zip: "411041",
+  country: "India",
+  fullAddress: "Ganesh Vandan, Ambegaon Bk, Pune 411041, India",
 });
 
 export const companyInfo: CompanyInfo = {
@@ -36,8 +36,8 @@ export const companyInfo: CompanyInfo = {
     createOffice("New York Office"),
     createOffice("Global Office 2"),
   ],
-  phone: "+1 (234) 567-890",
-  email: "info@coremarketresearch.com",
+  phone: "+91 76201 23288",
+  email: "contact@coremarketresearch.com",
   supportTime: "24/7 Support Available",
   businessHours: {
     days: "Monday - Friday",
