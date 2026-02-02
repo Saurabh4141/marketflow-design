@@ -4,31 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
+import { companyInfo } from "@/data/companyInfo";
 
 const contactInfo = [
   {
     icon: MapPin,
     label: "Address",
-    value: "Empire State Building, NYC",
-    subValue: "New York, NY 10001",
+    value: companyInfo.headquarter.address + ", " + companyInfo.headquarter.city,
+    subValue: companyInfo.headquarter.state + " " + companyInfo.headquarter.zip,
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (234) 567-890",
-    subValue: "Mon-Fri 9am-6pm EST",
+    value: companyInfo.phone,
+    subValue: companyInfo.businessHours.days.split(" - ")[0] + "-" + companyInfo.businessHours.days.split(" - ")[1] + " " + companyInfo.businessHours.hours.split(" - ")[0] + "-" + companyInfo.businessHours.hours.split(" - ")[1],
   },
   {
     icon: Mail,
     label: "Email",
-    value: "info@coremarketresearch.com",
-    subValue: "24/7 Support Available",
+    value: companyInfo.email,
+    subValue: companyInfo.supportTime,
   },
   {
     icon: Clock,
     label: "Business Hours",
-    value: "Monday - Friday",
-    subValue: "9:00 AM - 6:00 PM EST",
+    value: companyInfo.businessHours.days,
+    subValue: companyInfo.businessHours.hours,
   },
 ];
 

@@ -1,10 +1,11 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PaginationControls } from "@/components/ui/PaginationControls";
 import { 
   Search, 
   Filter, 
@@ -26,52 +27,94 @@ import {
 } from "@/data/industries";
 
 const categoryColors: Record<string, string> = {
-  Healthcare: "bg-rose-100 text-rose-700",
-  Technology: "bg-blue-100 text-blue-700",
-  "Consumer Goods": "bg-purple-100 text-purple-700",
-  Energy: "bg-green-100 text-green-700",
+  "Automobile & Transportation": "bg-cyan-100 text-cyan-700",
+  "Consumer Products": "bg-purple-100 text-purple-700",
+  "Food, Beverage & Nutrition": "bg-orange-100 text-orange-700",
+  "Chemicals & Materials": "bg-green-100 text-green-700",
+  "Technology": "bg-blue-100 text-blue-700",
+  "Industrial Automation": "bg-slate-100 text-slate-700",
+  "Services & Utilities": "bg-amber-100 text-amber-700",
+  "Pharmaceutical": "bg-rose-100 text-rose-700",
+  "Healthcare IT & Services": "bg-pink-100 text-pink-700",
+  "Medical Devices & Consumables": "bg-red-100 text-red-700",
+  "Medical Devices": "bg-rose-100 text-rose-700",
+  "IT Security & Software": "bg-indigo-100 text-indigo-700",
+  "Electronics & Semiconductors": "bg-violet-100 text-violet-700",
+  "Agriculture": "bg-lime-100 text-lime-700",
+  "Packaging & Transport": "bg-yellow-100 text-yellow-700",
+  "Energy & Power": "bg-emerald-100 text-emerald-700",
+  "Construction & Real Estate": "bg-stone-100 text-stone-700",
+  "Daily Necessities": "bg-teal-100 text-teal-700",
+  "Aerospace & Defense": "bg-sky-100 text-sky-700",
   "Financial Services": "bg-emerald-100 text-emerald-700",
-  Automotive: "bg-cyan-100 text-cyan-700",
-  "Aerospace & Defense": "bg-orange-100 text-orange-700",
-  "Real Estate": "bg-amber-100 text-amber-700",
 };
 
 const Industry = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [activeCategory, setActiveCategory] = useState("All Reports");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   const industry = slug ? getIndustryBySlug(slug) : null;
   const detail = slug ? getIndustryDetailBySlug(slug) : null;
+  
 
-  // If no slug, show all industries with reports
-  const isAllIndustries = !slug;
-
-  // Get all reports from all industries for "All Reports" view
-  const allReports = Object.entries(industryDetails).flatMap(([industrySlug, industryData]) => 
-    industryData.reports.map(report => ({
-      ...report,
-      category: industryData.title,
-      industrySlug
-    }))
+  // Get all reports from all industries
+  const allReports = useMemo(() => 
+    Object.entries(industryDetails).flatMap(([industrySlug, industryData]) => 
+      industryData.reports.map(report => ({
+        ...report,
+        category: industryData.title,
+        industrySlug
+      }))
+    ), []
   );
 
-  // Filter reports based on category and search
-  const filteredReports = allReports.filter((report) => {
-    const matchesCategory = activeCategory === "All Reports" || report.category === activeCategory;
-    const matchesSearch = report.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Determine which reports to show based on slug
+  const baseReports = useMemo(() => {
+    if (slug && detail) {
+      // Show only reports for this industry
+      return detail.reports.map(report => ({
+        ...report,
+        category: detail.title,
+        industrySlug: slug
+      }));
+    }
+    // Show all reports
+    return allReports;
+  }, [slug, detail, allReports]);
 
-  // Categories for filter pills
+  // Filter reports based on search
+  const filteredReports = useMemo(() => {
+    return baseReports.filter((report) =>
+      report.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [baseReports, searchQuery]);
+
+  // Pagination
+  const totalItems = filteredReports.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const paginatedReports = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredReports.slice(start, start + pageSize);
+  }, [filteredReports, currentPage, pageSize]);
+
+  // Reset to page 1 when search or slug changes
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
+  // Categories for filter pills - "All Reports" + all industries
   const categories = ["All Reports", ...industries.map(i => i.title)];
 
-  // Auto-select "All Reports" when navigating to /industry without slug
-  useEffect(() => {
-    if (isAllIndustries) {
-      setActiveCategory("All Reports");
-    }
-  }, [isAllIndustries]);
+  // Determine active category based on slug
+  const activeCategory = slug && detail ? detail.title : "All Reports";
 
   // If we have a slug but no matching industry, show 404-like message
   if (slug && !industry) {
@@ -88,30 +131,38 @@ const Industry = () => {
     );
   }
 
-  // Show specific industry detail page
-  if (slug && industry && detail) {
-    return (
-      <PageLayout>
-        {/* Breadcrumb */}
-        <div className="bg-secondary/30 border-b border-border">
-          <div className="container mx-auto px-4 py-3">
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-              <ChevronRight className="w-4 h-4" />
-              <Link to="/industry" className="hover:text-primary transition-colors">Industries</Link>
-              <ChevronRight className="w-4 h-4" />
-              <span className="text-foreground font-medium">{detail.title}</span>
-            </nav>
-          </div>
+  return (
+    <PageLayout>
+      {/* Breadcrumb */}
+      <div className="bg-secondary/30 border-b border-border">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-4 h-4" />
+            {slug && detail ? (
+              <>
+                <Link to="/industry" className="hover:text-primary transition-colors">Industries</Link>
+                <ChevronRight className="w-4 h-4" />
+                <span className="text-foreground font-medium">{detail.title}</span>
+              </>
+            ) : (
+              <span className="text-foreground font-medium">Industries</span>
+            )}
+          </nav>
         </div>
+      </div>
 
-        <PageHero
-          badge={detail.title}
-          title={`${detail.title} Market Research`}
-          subtitle={detail.overview}
-        />
+      <PageHero
+        badge={slug && detail ? detail.title : "Industry Research"}
+        title={slug && detail ? `${detail.title} Market Research` : "Industry Insights & Analysis"}
+        subtitle={slug && detail 
+          ? detail.overview 
+          : "Access comprehensive market research reports covering 50+ industries worldwide. Data-driven insights to fuel your business decisions."
+        }
+      />
 
-        {/* Key Stats */}
+      {/* Key Stats - Only show for specific industry */}
+      {slug && detail && (
         <section className="py-12 -mt-8 relative z-10">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-3 gap-6">
@@ -133,9 +184,10 @@ const Industry = () => {
             </div>
           </div>
         </section>
+      )}
 
-
-        {/* Top Players */}
+      {/* Top Players - Only show for specific industry */}
+      {slug && detail && (
         <section className="py-12 bg-secondary/30">
           <div className="container mx-auto px-4">
             <AnimatedSection>
@@ -155,159 +207,10 @@ const Industry = () => {
             </div>
           </div>
         </section>
-
-        {/* Search & Filter for Industry Reports */}
-        <section className="py-8">
-          <div className="container mx-auto px-4">
-            <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    placeholder="Search reports..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-12 rounded-xl"
-                  />
-                </div>
-                <Button variant="outline" size="lg" className="gap-2">
-                  <Filter className="w-4 h-4" />
-                  Advanced Filters
-                </Button>
-              </div>
-
-              {/* Category Pills */}
-              <nav aria-label="Industry categories" className="flex flex-wrap gap-2 mt-6">
-                {categories.map((category) => (
-                  <Link
-                    key={category}
-                    to={category === "All Reports" ? "/industry" : `/industry/${industries.find(i => i.title === category)?.slug || ""}`}
-                    className={cn(
-                      "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                      (category === detail.title || (category === "All Reports" && activeCategory === "All Reports"))
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    )}
-                  >
-                    {category}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </section>
-
-        {/* Reports for this Industry */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
-            {(() => {
-              const filteredIndustryReports = detail.reports.filter((report) =>
-                report.title.toLowerCase().includes(searchQuery.toLowerCase())
-              );
-              
-              return (
-                <>
-                  <AnimatedSection>
-                    <div className="flex items-center justify-between mb-8">
-                      <div>
-                        <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                          {detail.title} Reports
-                        </h2>
-                        <p className="text-muted-foreground mt-1">
-                          Showing <span className="font-medium text-foreground">{filteredIndustryReports.length}</span> reports
-                        </p>
-                      </div>
-                      <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all">
-                        View All Reports <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </AnimatedSection>
-
-                  <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredIndustryReports.map((report) => (
-                      <StaggerItem key={report.slug}>
-                        <Link to={`/reports/${report.slug}`} className="block h-full">
-                          <article className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
-                            <div className="flex items-start justify-between gap-4 mb-4">
-                              <span className={cn("px-3 py-1 rounded-full text-xs font-medium", categoryColors[detail.title])}>
-                                {detail.title}
-                              </span>
-                              <div className="flex items-center gap-1 text-emerald-600 text-sm font-medium">
-                                <TrendingUp className="w-4 h-4" />
-                                {report.growth}
-                              </div>
-                            </div>
-
-                            <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                              {report.title}
-                            </h3>
-
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                              <span className="flex items-center gap-1.5">
-                                <Clock className="w-4 h-4" />
-                                {report.date}
-                              </span>
-                              <span>{report.pages} pages</span>
-                            </div>
-
-                            <div className="flex items-center justify-between pt-4 border-t border-border">
-                              <span className="font-display text-xl font-bold text-foreground">
-                                {report.price}
-                              </span>
-                              <div className="flex gap-2">
-                                <Button variant="outline" size="sm">
-                                  <Eye className="w-4 h-4" />
-                                </Button>
-                                <Button variant="default" size="sm">
-                                  <Download className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          </article>
-                        </Link>
-                      </StaggerItem>
-                    ))}
-                  </StaggerContainer>
-                </>
-              );
-            })()}
-          </div>
-        </section>
-
-
-        {/* CTA */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 text-center">
-            <AnimatedSection>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Need Custom {detail.title} Research?
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Our team can create tailored research solutions specific to your {detail.title.toLowerCase()} business needs.
-              </p>
-              <Link to="/contact">
-                <Button variant="gradient" size="xl">
-                  Request Custom Research
-                </Button>
-              </Link>
-            </AnimatedSection>
-          </div>
-        </section>
-      </PageLayout>
-    );
-  }
-
-  // Show all industries with reports (default view at /industry)
-  return (
-    <PageLayout>
-      <PageHero
-        badge="Industry Research"
-        title="Industry Insights & Analysis"
-        subtitle="Access comprehensive market research reports covering 50+ industries worldwide. Data-driven insights to fuel your business decisions."
-      />
+      )}
 
       {/* Search & Filter */}
-      <section className="py-8 -mt-10 relative z-10">
+      <section className={cn("py-8 relative z-10", !slug && "-mt-10")}>
         <div className="container mx-auto px-4">
           <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
             <div className="flex flex-col md:flex-row gap-4">
@@ -316,7 +219,7 @@ const Industry = () => {
                 <Input
                   placeholder="Search reports..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="pl-12 h-12 rounded-xl"
                 />
               </div>
@@ -327,22 +230,29 @@ const Industry = () => {
             </div>
 
             {/* Category Pills */}
-            <div className="flex flex-wrap gap-2 mt-6">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                    activeCategory === category
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                  )}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+            <nav aria-label="Industry categories" className="flex flex-wrap gap-2 mt-6">
+              {categories.map((category) => {
+                const categorySlug = category === "All Reports" 
+                  ? null 
+                  : industries.find(i => i.title === category)?.slug;
+                const isActive = category === activeCategory;
+                
+                return (
+                  <Link
+                    key={category}
+                    to={category === "All Reports" ? "/industry" : `/industry/${categorySlug}`}
+                    className={cn(
+                      "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    )}
+                  >
+                    {category}
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
         </div>
       </section>
@@ -350,22 +260,35 @@ const Industry = () => {
       {/* Reports Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <p className="text-muted-foreground">
-              Showing <span className="font-medium text-foreground">{filteredReports.length}</span> reports
-            </p>
-          </div>
+          <AnimatedSection>
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                  {slug && detail ? `${detail.title} Reports` : "All Reports"}
+                </h2>
+                <p className="text-muted-foreground mt-1">
+                  Showing <span className="font-medium text-foreground">{paginatedReports.length}</span> of{" "}
+                  <span className="font-medium text-foreground">{totalItems}</span> reports
+                </p>
+              </div>
+              {slug && (
+                <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all">
+                  View All Reports <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
+            </div>
+          </AnimatedSection>
 
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredReports.map((report) => (
-              <StaggerItem key={report.slug}>
+            {paginatedReports.map((report) => (
+              <StaggerItem key={`${report.industrySlug}-${report.slug}`}>
                 <Link to={`/reports/${report.slug}`} className="block h-full">
-                  <div className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
+                  <article className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <Link 
                         to={`/industry/${report.industrySlug}`}
                         onClick={(e) => e.stopPropagation()}
-                        className={cn("px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity", categoryColors[report.category])}
+                        className={cn("px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity", categoryColors[report.category] || "bg-gray-100 text-gray-700")}
                       >
                         {report.category}
                       </Link>
@@ -400,32 +323,37 @@ const Industry = () => {
                         </Button>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 </Link>
               </StaggerItem>
             ))}
           </StaggerContainer>
 
-          {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              Load More Reports
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12">
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={totalItems}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={handlePageSizeChange}
+              />
+            </div>
+          )}
         </div>
       </section>
-
 
       {/* CTA */}
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Need a Custom Report?
+              Need Custom {slug && detail ? detail.title : "Market"} Research?
             </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Our team can create tailored research solutions specific to your business needs.
+              Our team can create tailored research solutions specific to your {slug && detail ? detail.title.toLowerCase() : "industry"} business needs.
             </p>
             <Link to="/contact">
               <Button variant="gradient" size="xl">

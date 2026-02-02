@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { cn } from "@/lib/utils";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
+import { companyInfo } from "@/data/companyInfo";
+import { industries } from "@/data/industries";
+import { services } from "@/data/services";
 import Logo from "@/assets/logo.png";
 
 const navItems = [
@@ -17,7 +20,7 @@ const navItems = [
   },
   {
     label: "Services",
-    href: "/service",
+    href: "/services",
     hasMegaMenu: true,
     menuType: "services" as const,
   },
@@ -31,6 +34,9 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMegaMenu, setActiveMegaMenu] = useState<
+    "industries" | "services" | null
+  >(null);
+  const [mobileExpandedMenu, setMobileExpandedMenu] = useState<
     "industries" | "services" | null
   >(null);
   const location = useLocation();
@@ -48,6 +54,7 @@ export const Header = () => {
   useEffect(() => {
     setActiveMegaMenu(null);
     setIsMobileMenuOpen(false);
+    setMobileExpandedMenu(null);
   }, [location.pathname]);
 
   const handleNavClick = (item: (typeof navItems)[0]) => {
@@ -58,6 +65,10 @@ export const Header = () => {
     } else {
       setActiveMegaMenu(null);
     }
+  };
+
+  const handleMobileMenuToggle = (menuType: "industries" | "services") => {
+    setMobileExpandedMenu(mobileExpandedMenu === menuType ? null : menuType);
   };
 
   return (
@@ -71,18 +82,18 @@ export const Header = () => {
         <div className="container mx-auto flex justify-between items-center text-sm">
           <div className="flex items-center gap-6">
             <a
-              href="tel:+1234567890"
+              href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>+1 (234) 567-890</span>
+              <span>{companyInfo.phone}</span>
             </a>
             <a
-              href="mailto:info@coremarketresearch.com"
+              href={`mailto:${companyInfo.email}`}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
               <Mail className="w-3.5 h-3.5" />
-              <span>info@coremarketresearch.com</span>
+              <span>{companyInfo.email}</span>
             </a>
           </div>
           <div className="flex items-center gap-4">
@@ -206,22 +217,73 @@ export const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-card border-t border-border animate-fade-in">
+          <div className="lg:hidden bg-card border-t border-border animate-fade-in max-h-[80vh] overflow-y-auto">
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => (
-                <Link
-                  key={item.label}
-                  to={item.href}
-                  className="flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                  {item.hasMegaMenu && <ChevronDown className="w-4 h-4" />}
-                </Link>
+                <div key={item.label}>
+                  {item.hasMegaMenu ? (
+                    <>
+                      <button
+                        onClick={() => handleMobileMenuToggle(item.menuType!)}
+                        className="w-full flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                      >
+                        {item.label}
+                        <ChevronDown
+                          className={cn(
+                            "w-4 h-4 transition-transform",
+                            mobileExpandedMenu === item.menuType && "rotate-180",
+                          )}
+                        />
+                      </button>
+                      {/* Mobile Submenu */}
+                      {mobileExpandedMenu === item.menuType && (
+                        <div className="ml-4 mt-1 border-l-2 border-border pl-4 space-y-1">
+                          {item.menuType === "industries" &&
+                            industries.slice(0, 10).map((industry) => (
+                              <Link
+                                key={industry.slug}
+                                to={industry.href}
+                                className="block px-3 py-2 text-sm text-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {industry.title}
+                              </Link>
+                            ))}
+                          {item.menuType === "industries" && industries.length > 10 && (
+                            <Link
+                              to="/industry"
+                              className="block px-3 py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              View All Industries →
+                            </Link>
+                          )}
+                          {item.menuType === "services" &&
+                            services.map((service) => (
+                              <Link
+                                key={service.slug}
+                                to={service.href}
+                                className="block px-3 py-2 text-sm text-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                {service.title}
+                              </Link>
+                            ))}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <Link
+                      to={item.href}
+                      className="flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </div>
               ))}
 
-             
-              
               <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="gradient_2" className="mt-4 w-full">
                  Login

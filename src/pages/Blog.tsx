@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { Search, Calendar, Clock, User, ArrowRight } from "lucide-react";
+import { Search, Calendar, Clock, User, ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PaginationControls } from "@/components/ui/PaginationControls";
 import { cn } from "@/lib/utils";
 
 const categories = ["All", "Industry Insights", "Research Methods", "AI & Technology", "Case Studies"];
@@ -72,23 +73,101 @@ const blogPosts = [
     readTime: "7 min read",
     image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=500&fit=crop",
   },
+  {
+    title: "Global Market Trends: What to Expect in 2024",
+    slug: "global-market-trends-2024",
+    excerpt: "An in-depth analysis of emerging global market trends and their implications for businesses across industries.",
+    category: "Industry Insights",
+    author: "Michael Ross",
+    date: "Dec 15, 2023",
+    readTime: "6 min read",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=500&fit=crop",
+  },
+  {
+    title: "Machine Learning in Predictive Analytics",
+    slug: "machine-learning-predictive-analytics",
+    excerpt: "How machine learning is transforming predictive analytics in market research and what it means for your business.",
+    category: "AI & Technology",
+    author: "Dr. Sarah Chen",
+    date: "Dec 10, 2023",
+    readTime: "7 min read",
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=500&fit=crop",
+  },
+  {
+    title: "Case Study: Digital Transformation in Retail",
+    slug: "digital-transformation-retail-case-study",
+    excerpt: "How our research helped a major retailer navigate their digital transformation journey successfully.",
+    category: "Case Studies",
+    author: "David Park",
+    date: "Dec 5, 2023",
+    readTime: "9 min read",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&h=500&fit=crop",
+  },
+  {
+    title: "The Art of Competitive Intelligence",
+    slug: "art-of-competitive-intelligence",
+    excerpt: "Master the techniques of gathering and analyzing competitive intelligence to stay ahead in your market.",
+    category: "Research Methods",
+    author: "Emily Zhang",
+    date: "Nov 28, 2023",
+    readTime: "6 min read",
+    image: "https://images.unsplash.com/photo-1553484771-371a605b060b?w=800&h=500&fit=crop",
+  },
 ];
 
 const Blog = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
-  const filteredPosts = blogPosts.filter((post) => {
-    const matchesCategory = activeCategory === "All" || post.category === activeCategory;
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredPosts = useMemo(() => {
+    return blogPosts.filter((post) => {
+      const matchesCategory = activeCategory === "All" || post.category === activeCategory;
+      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [activeCategory, searchQuery]);
 
-  const featuredPost = filteredPosts.find((post) => post.featured);
-  const regularPosts = filteredPosts.filter((post) => !post.featured);
+  // Pagination
+  const totalItems = filteredPosts.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const paginatedPosts = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredPosts.slice(start, start + pageSize);
+  }, [filteredPosts, currentPage, pageSize]);
+
+  const featuredPost = paginatedPosts.find((post) => post.featured);
+  const regularPosts = paginatedPosts.filter((post) => !post.featured);
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
 
   return (
     <PageLayout>
+      {/* Breadcrumb */}
+      <div className="bg-secondary/30 border-b border-border">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-foreground font-medium">Blog</span>
+          </nav>
+        </div>
+      </div>
+
       <PageHero
         badge="Blog & Insights"
         title="Latest Market Research Insights"
@@ -104,16 +183,16 @@ const Blog = () => {
               <Input
                 placeholder="Search articles..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-12 h-12 rounded-xl"
               />
             </div>
 
-            <div className="flex flex-wrap gap-2 mt-6">
+            <nav aria-label="Blog categories" className="flex flex-wrap gap-2 mt-6">
               {categories.map((category) => (
                 <button
                   key={category}
-                  onClick={() => setActiveCategory(category)}
+                  onClick={() => handleCategoryChange(category)}
                   className={cn(
                     "px-4 py-2 rounded-full text-sm font-medium transition-all",
                     activeCategory === category
@@ -124,13 +203,13 @@ const Blog = () => {
                   {category}
                 </button>
               ))}
-            </div>
+            </nav>
           </div>
         </div>
       </section>
 
       {/* Featured Post */}
-      {featuredPost && (
+      {featuredPost && currentPage === 1 && (
         <section className="py-12">
           <div className="container mx-auto px-4">
             <AnimatedSection>
@@ -185,9 +264,16 @@ const Blog = () => {
       {/* Blog Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
+          <div className="mb-8">
+            <p className="text-muted-foreground">
+              Showing <span className="font-medium text-foreground">{paginatedPosts.length}</span> of{" "}
+              <span className="font-medium text-foreground">{totalItems}</span> articles
+            </p>
+          </div>
+
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularPosts.map((post) => (
-              <StaggerItem key={post.title}>
+              <StaggerItem key={post.slug}>
                 <Link to={`/blog/${post.slug}`}>
                   <article className="group h-full flex flex-col rounded-2xl bg-card border border-border overflow-hidden hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
                     <div className="relative h-48 overflow-hidden">
@@ -219,13 +305,19 @@ const Blog = () => {
             ))}
           </StaggerContainer>
 
-          {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg">
-              Load More Articles
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12">
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                totalItems={totalItems}
+                onPageChange={setCurrentPage}
+                onPageSizeChange={handlePageSizeChange}
+              />
+            </div>
+          )}
         </div>
       </section>
 

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { 
   Linkedin, 
-  Twitter, 
   Facebook, 
   Instagram, 
   Mail, 
@@ -11,40 +10,53 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { companyInfo } from "@/data/companyInfo";
+
+// X (Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    className={className}
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 const footerLinks = {
   services: [
-    { label: "Market Opportunity", href: "#" },
-    { label: "Segmentation Analysis", href: "#" },
-    { label: "Pricing Strategy", href: "#" },
-    { label: "Consumer Behavior", href: "#" },
-    { label: "Competitor Analysis", href: "#" },
+    { label: "Market Opportunity", href: "/services/market-opportunity" },
+    { label: "Segmentation Analysis", href: "/services/segmentation-analysis" },
+    { label: "Pricing Strategy", href: "/services/pricing-strategy" },
+    { label: "Consumer Behavior", href: "/services/consumer-behavior" },
+    { label: "Competitor Analysis", href: "/services/competitor-analysis" },
   ],
   industries: [
-    { label: "Healthcare", href: "#" },
-    { label: "Technology", href: "#" },
-    { label: "Consumer Goods", href: "#" },
-    { label: "Energy", href: "#" },
-    { label: "Finance", href: "#" },
+    { label: "Healthcare", href: "/industry/healthcare-it-services" },
+    { label: "Technology", href: "/industry/technology" },
+    { label: "Consumer Goods", href: "/industry/consumer-products" },
+    { label: "Energy", href: "/industry/energy-power" },
+    { label: "Finance", href: "/industry/financial-services" },
   ],
   company: [
-    { label: "About Us", href: "#about" },
-    { label: "Our Team", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Blog", href: "#blog" },
-    { label: "Contact", href: "#contact" },
+    { label: "About Us", href: "/about" },
+    { label: "Our Team", href: "/about" },
+    { label: "Careers", href: "/contact" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-    { label: "Cookie Policy", href: "#" },
-    { label: "Disclaimer", href: "#" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Disclaimer", href: "/disclaimer" },
   ],
 };
 
 const socialLinks = [
   { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: XIcon, href: "#", label: "X" },
   { icon: Facebook, href: "#", label: "Facebook" },
   { icon: Instagram, href: "#", label: "Instagram" },
 ];
@@ -99,15 +111,15 @@ export const Footer = () => {
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-background/70">
                 <MapPin className="w-4 h-4 text-accent" />
-                <span>Empire State Building, NYC, NY 10001</span>
+                <span>{companyInfo.headquarter.fullAddress}</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <Phone className="w-4 h-4 text-accent" />
-                <span>+1 (234) 567-890</span>
+                <span>{companyInfo.phone}</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <Mail className="w-4 h-4 text-accent" />
-                <span>info@coremarketresearch.com</span>
+                <span>{companyInfo.email}</span>
               </div>
             </div>
             {/* Social Links */}
@@ -131,12 +143,12 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-background/70 hover:text-accent transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -148,12 +160,12 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.industries.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-background/70 hover:text-accent transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -165,12 +177,12 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-background/70 hover:text-accent transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -182,12 +194,12 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-background/70 hover:text-accent transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
