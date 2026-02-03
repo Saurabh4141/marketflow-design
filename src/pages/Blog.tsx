@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { Search, Calendar, Clock, User, ArrowRight, ChevronRight } from "lucide-react";
+import { Calendar, Clock, User, ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaginationControls } from "@/components/ui/PaginationControls";
+import { BlogFilterSidebar, FloatingBlogFilterButton } from "@/components/filters/BlogFilterSidebar";
 import { cn } from "@/lib/utils";
 
 const categories = ["All", "Industry Insights", "Research Methods", "AI & Technology", "Case Studies"];
@@ -120,6 +121,7 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const filteredPosts = useMemo(() => {
     return blogPosts.filter((post) => {
@@ -155,8 +157,34 @@ const Blog = () => {
     setCurrentPage(1);
   };
 
+  const handleClearFilters = () => {
+    setActiveCategory("All");
+    setSearchQuery("");
+    setCurrentPage(1);
+  };
+
+  const hasActiveFilters = searchQuery.length > 0 || activeCategory !== "All";
+
   return (
     <PageLayout>
+      {/* Floating Filter Button */}
+      <FloatingBlogFilterButton 
+        onClick={() => setIsFilterOpen(true)} 
+        hasActiveFilters={hasActiveFilters}
+      />
+
+      {/* Filter Sidebar */}
+      <BlogFilterSidebar
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        categories={categories}
+        activeCategory={activeCategory}
+        onCategoryChange={handleCategoryChange}
+        onClearFilters={handleClearFilters}
+      />
+
       {/* Breadcrumb */}
       <div className="bg-secondary/30 border-b border-border">
         <div className="container mx-auto px-4 py-3">
@@ -173,40 +201,6 @@ const Blog = () => {
         title="Latest Market Research Insights"
         subtitle="Stay updated with the latest trends, insights, and best practices in market research. Expert perspectives from our team of analysts."
       />
-
-      {/* Search & Categories */}
-      <section className="py-8 -mt-10 relative z-10">
-        <div className="container mx-auto px-4">
-          <div className="p-6 rounded-2xl bg-card border border-border shadow-lg">
-            <div className="relative max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                className="pl-12 h-12 rounded-xl"
-              />
-            </div>
-
-            <nav aria-label="Blog categories" className="flex flex-wrap gap-2 mt-6">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                  className={cn(
-                    "px-4 py-2 rounded-full text-sm font-medium transition-all",
-                    activeCategory === category
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                  )}
-                >
-                  {category}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-      </section>
 
       {/* Featured Post */}
       {featuredPost && currentPage === 1 && (
