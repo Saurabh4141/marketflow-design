@@ -15,6 +15,6 @@
 //   const params = new URLSearchParams();
 //   if (industrySlug) params.append('industry', industrySlug);
 //   if (page) params.append('page', page.toString());
-//   const response = await fetch(`/api/reports?${params}`);
+//   const response = await fetch(`/api/report?${params}`);
 //   return response.json();
 // };

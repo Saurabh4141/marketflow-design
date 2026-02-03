@@ -666,7 +666,7 @@ const ReportDetail = () => {
                               <p className="text-xs sm:text-sm font-medium text-[#1e3a5f] mb-3">{report.marketSize}</p>
                             )}
                             <Link 
-                              to={`/reports/${report.id}`}
+                              to={`/report/${report.id}`}
                               className="inline-flex items-center gap-1 px-3 sm:px-4 py-2 bg-[#1e3a5f] text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-[#162d4d] transition-colors"
                             >
                               View Report

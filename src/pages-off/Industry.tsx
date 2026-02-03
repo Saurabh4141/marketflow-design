@@ -252,7 +252,7 @@ const Industry = () => {
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedReports.map((report) => (
               <StaggerItem key={`${report.industrySlug}-${report.slug}`}>
-                <Link to={`/reports/${report.slug}`} className="block h-full">
+                <Link to={`/report/${report.slug}`} className="block h-full">
                   <article className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
                     <div className="flex items-start justify-between gap-4 mb-4">
                       <Link 
