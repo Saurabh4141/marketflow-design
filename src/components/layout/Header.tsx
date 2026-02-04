@@ -11,32 +11,44 @@ import { services } from "@/data/services";
 import Logo from "@/assets/logo.png";
 
 const navItems = [
-  { label: "Home", href: "/" },
+  { label: "Home", href: "/", activeMatch: "exact" as const },
   {
     label: "Industries",
     href: "/industry",
     hasMegaMenu: true,
     menuType: "industries" as const,
+    activeMatch: "exact" as const, // Only active on /industry exactly
   },
   {
     label: "Services",
     href: "/services",
     hasMegaMenu: true,
     menuType: "services" as const,
+    activeMatch: "prefix" as const,
   },
-  { label: "Reports", href: "/industry" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Reports", href: "/industry", activeMatch: "nested" as const }, // Active on /industry/:slug
+  { label: "Blog", href: "/blog", activeMatch: "prefix" as const },
+  { label: "About", href: "/about", activeMatch: "exact" as const },
+  { label: "Contact", href: "/contact", activeMatch: "exact" as const },
 ];
 
-// Helper to check if a route is active
-const isRouteActive = (href: string, pathname: string): boolean => {
-  if (href === "/") {
-    return pathname === "/";
+// Helper to check if a route is active with different matching strategies
+const isRouteActive = (
+  href: string, 
+  pathname: string, 
+  matchType: "exact" | "prefix" | "nested" = "prefix"
+): boolean => {
+  switch (matchType) {
+    case "exact":
+      return pathname === href;
+    case "nested":
+      // Only active when there's a nested route (slug present)
+      return pathname.startsWith(href + "/") && pathname !== href;
+    case "prefix":
+    default:
+      // Active on exact match or any nested route
+      return pathname === href || pathname.startsWith(href + "/");
   }
-  // For nested routes like /industry/:slug, check if pathname starts with the base route
-  return pathname === href || pathname.startsWith(href + "/");
 };
 
 export const Header = () => {
@@ -148,7 +160,7 @@ export const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
               {navItems.map((item) => {
-                const isActive = isRouteActive(item.href, location.pathname);
+                const isActive = isRouteActive(item.href, location.pathname, item.activeMatch);
                 
                 return (
                   <div key={item.label} className="relative">
@@ -240,7 +252,7 @@ export const Header = () => {
           <div className="lg:hidden bg-card border-t border-border animate-fade-in max-h-[80vh] overflow-y-auto">
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
               {navItems.map((item) => {
-                const isActive = isRouteActive(item.href, location.pathname);
+                const isActive = isRouteActive(item.href, location.pathname, item.activeMatch);
                 
                 return (
                   <div key={item.label}>
