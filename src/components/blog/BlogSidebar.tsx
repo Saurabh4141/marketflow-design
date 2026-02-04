@@ -7,7 +7,7 @@ const categories = [
   { name: "Market Trends", slug: "market-trends" },
   { name: "Consumer Insights", slug: "consumer-insights" },
   { name: "Industry Analysis", slug: "industry-analysis" },
-  { name: "Data & Analytics", slug: "data-analytics" },
+  { name: "Data & Analytics", slug: "data-&-analytics" },
 ];
 
 const popularPosts = [

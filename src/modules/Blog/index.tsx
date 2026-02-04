@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaginationControls } from "@/components/ui/PaginationControls";
 import { BlogFilterSidebar, FloatingBlogFilterButton } from "@/components/filters/BlogFilterSidebar";
-import { cn } from "@/lib/utils";
 
 const categories = ["All", "Industry Insights", "Research Methods", "AI & Technology", "Case Studies"];
 

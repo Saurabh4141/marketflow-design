@@ -65,20 +65,20 @@ const tabs = [
 // Related Reports Data
 const relatedReports = [
   {
-    id: "hpv-vaccine-market",
+    slug: "/report/hpv-vaccine-market",
     title: "HPV Vaccine Market",
     description: "Global market analysis and forecast",
     image: "/placeholder.svg",
   },
   {
-    id: "gsk-vaccine-analysis",
+    slug: "/report/gsk-vaccine-analysis",
     title: "GSK Vaccine Portfolio",
     description: "Comprehensive portfolio analysis",
     marketSize: "$950 Million",
     image: "/placeholder.svg",
   },
   {
-    id: "pneumonia-vaccine-market",
+    slug: "/report/pneumonia-vaccine-market",
     title: "Pneumonia Vaccine Market",
     description: "Market trends and growth forecast",
     image: "/placeholder.svg",
@@ -655,7 +655,7 @@ const ReportDetail = () => {
                   <div className="p-4 sm:p-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {relatedReports.map((report) => (
-                        <div key={report.id} className="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
+                        <div key={report.slug} className="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-md transition-shadow">
                           <div className="h-28 sm:h-32 bg-gradient-to-br from-sky-100 to-sky-50 flex items-center justify-center">
                             <BarChart3 className="w-10 sm:w-12 h-10 sm:h-12 text-sky-300" />
                           </div>
@@ -666,7 +666,7 @@ const ReportDetail = () => {
                               <p className="text-xs sm:text-sm font-medium text-[#1e3a5f] mb-3">{report.marketSize}</p>
                             )}
                             <Link 
-                              to={`/report/${report.id}`}
+                              to={`${report.slug}`}
                               className="inline-flex items-center gap-1 px-3 sm:px-4 py-2 bg-[#1e3a5f] text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-[#162d4d] transition-colors"
                             >
                               View Report
