@@ -20,24 +20,38 @@ export interface CompanyInfo {
   };
 }
 
-const createOffice = (name: string): OfficeLocation => ({
-  name,
-  address: "Ganesh Vandan",
-  city: "Pune",
-  state: "Maharashtra",
-  zip: "411041",
-  country: "India",
-  fullAddress: "Ganesh Vandan, Ambegaon Bk, Pune 411041, India",
-});
-
 export const companyInfo: CompanyInfo = {
-  headquarter: createOffice("Headquarters"),
+  headquarter: {
+    name: "Headquarters",
+    address: "Empire State Building, NYC",
+    city: "New York",
+    state: "NY",
+    zip: "10001",
+    country: "USA",
+    fullAddress: "Empire State Building, NYC New York, NY 10001, USA",
+  },
   globalOffices: [
-    createOffice("New York Office"),
-    createOffice("Global Office 2"),
+    {
+      name: "London Office",
+      address: "Empire State Building, NYC",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA",
+      fullAddress: "Empire State Building, NYC New York, NY 10001, USA",
+    },
+    {
+      name: "Singapore Office",
+      address: "Empire State Building, NYC",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA",
+      fullAddress: "Empire State Building, NYC New York, NY 10001, USA",
+    },
   ],
-  phone: "+91 76201 23288",
-  email: "contact@coremarketresearch.com",
+  phone: "+1 (234) 567-890",
+  email: "info@coremarketresearch.com",
   supportTime: "24/7 Support Available",
   businessHours: {
     days: "Monday - Friday",
