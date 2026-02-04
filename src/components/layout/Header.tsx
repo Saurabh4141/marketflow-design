@@ -30,6 +30,15 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
+// Helper to check if a route is active
+const isRouteActive = (href: string, pathname: string): boolean => {
+  if (href === "/") {
+    return pathname === "/";
+  }
+  // For nested routes like /industry/:slug, check if pathname starts with the base route
+  return pathname === href || pathname.startsWith(href + "/");
+};
+
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -138,36 +147,47 @@ export const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
-                <div key={item.label} className="relative">
-                  {item.hasMegaMenu ? (
-                    <button
-                      onClick={() => handleNavClick(item)}
-                      className={cn(
-                        "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors rounded-lg",
-                        activeMegaMenu === item.menuType
-                          ? "text-primary bg-primary/5"
-                          : "text-foreground/80 hover:text-primary hover:bg-primary/5",
-                      )}
-                    >
-                      {item.label}
-                      <ChevronDown
+              {navItems.map((item) => {
+                const isActive = isRouteActive(item.href, location.pathname);
+                
+                return (
+                  <div key={item.label} className="relative">
+                    {item.hasMegaMenu ? (
+                      <button
+                        onClick={() => handleNavClick(item)}
                         className={cn(
-                          "w-4 h-4 transition-transform",
-                          activeMegaMenu === item.menuType && "rotate-180",
+                          "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors rounded-lg",
+                          activeMegaMenu === item.menuType
+                            ? "text-primary bg-primary/5"
+                            : isActive
+                            ? "text-primary bg-primary/5"
+                            : "text-foreground/80 hover:text-primary hover:bg-primary/5",
                         )}
-                      />
-                    </button>
-                  ) : (
-                    <Link
-                      to={item.href}
-                      className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                      >
+                        {item.label}
+                        <ChevronDown
+                          className={cn(
+                            "w-4 h-4 transition-transform",
+                            activeMegaMenu === item.menuType && "rotate-180",
+                          )}
+                        />
+                      </button>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors rounded-lg",
+                          isActive
+                            ? "text-primary bg-primary/5"
+                            : "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
             </nav>
 
             {/* Actions */}
@@ -219,70 +239,94 @@ export const Header = () => {
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-card border-t border-border animate-fade-in max-h-[80vh] overflow-y-auto">
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-              {navItems.map((item) => (
-                <div key={item.label}>
-                  {item.hasMegaMenu ? (
-                    <>
-                      <button
-                        onClick={() => handleMobileMenuToggle(item.menuType!)}
-                        className="w-full flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
+              {navItems.map((item) => {
+                const isActive = isRouteActive(item.href, location.pathname);
+                
+                return (
+                  <div key={item.label}>
+                    {item.hasMegaMenu ? (
+                      <>
+                        <button
+                          onClick={() => handleMobileMenuToggle(item.menuType!)}
+                          className={cn(
+                            "w-full flex items-center justify-between px-4 py-3 rounded-lg transition-colors",
+                            isActive
+                              ? "text-primary bg-primary/5 font-medium"
+                              : "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                          )}
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className={cn(
+                              "w-4 h-4 transition-transform",
+                              mobileExpandedMenu === item.menuType && "rotate-180",
+                            )}
+                          />
+                        </button>
+                        {/* Mobile Submenu */}
+                        {mobileExpandedMenu === item.menuType && (
+                          <div className="ml-4 mt-1 border-l-2 border-border pl-4 space-y-1">
+                            {item.menuType === "industries" &&
+                              industries.slice(0, 10).map((industry) => (
+                                <Link
+                                  key={industry.slug}
+                                  to={industry.href}
+                                  className={cn(
+                                    "block px-3 py-2 text-sm rounded-lg transition-colors",
+                                    location.pathname === industry.href
+                                      ? "text-primary bg-primary/5 font-medium"
+                                      : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                                  )}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {industry.title}
+                                </Link>
+                              ))}
+                            {item.menuType === "industries" && industries.length > 10 && (
+                              <Link
+                                to="/industry"
+                                className="block px-3 py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                              >
+                                View All Industries →
+                              </Link>
+                            )}
+                            {item.menuType === "services" &&
+                              services.map((service) => (
+                                <Link
+                                  key={service.slug}
+                                  to={service.href}
+                                  className={cn(
+                                    "block px-3 py-2 text-sm rounded-lg transition-colors",
+                                    location.pathname === service.href
+                                      ? "text-primary bg-primary/5 font-medium"
+                                      : "text-foreground/70 hover:text-primary hover:bg-primary/5"
+                                  )}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {service.title}
+                                </Link>
+                              ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "flex items-center justify-between px-4 py-3 rounded-lg transition-colors",
+                          isActive
+                            ? "text-primary bg-primary/5 font-medium"
+                            : "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                        )}
+                        onClick={() => setIsMobileMenuOpen(false)}
                       >
                         {item.label}
-                        <ChevronDown
-                          className={cn(
-                            "w-4 h-4 transition-transform",
-                            mobileExpandedMenu === item.menuType && "rotate-180",
-                          )}
-                        />
-                      </button>
-                      {/* Mobile Submenu */}
-                      {mobileExpandedMenu === item.menuType && (
-                        <div className="ml-4 mt-1 border-l-2 border-border pl-4 space-y-1">
-                          {item.menuType === "industries" &&
-                            industries.slice(0, 10).map((industry) => (
-                              <Link
-                                key={industry.slug}
-                                to={industry.href}
-                                className="block px-3 py-2 text-sm text-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                {industry.title}
-                              </Link>
-                            ))}
-                          {item.menuType === "industries" && industries.length > 10 && (
-                            <Link
-                              to="/industry"
-                              className="block px-3 py-2 text-sm font-medium text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                              onClick={() => setIsMobileMenuOpen(false)}
-                            >
-                              View All Industries →
-                            </Link>
-                          )}
-                          {item.menuType === "services" &&
-                            services.map((service) => (
-                              <Link
-                                key={service.slug}
-                                to={service.href}
-                                className="block px-3 py-2 text-sm text-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                                onClick={() => setIsMobileMenuOpen(false)}
-                              >
-                                {service.title}
-                              </Link>
-                            ))}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <Link
-                      to={item.href}
-                      className="flex items-center justify-between px-4 py-3 text-foreground/80 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
+                      </Link>
+                    )}
+                  </div>
+                );
+              })}
 
               <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="gradient_2" className="mt-4 w-full">

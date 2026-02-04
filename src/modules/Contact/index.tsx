@@ -269,11 +269,11 @@ const Contact = () => {
                     Our support team is available around the clock.
                   </p>
                   <a
-                    href="tel:+1234567890"
+                    href={`tel:${companyInfo.phone.replace(/\s/g, "")}`}
                     className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
                   >
                     <Phone className="w-4 h-4" />
-                    Call Now
+                    {companyInfo.phone}
                   </a>
                 </div>
               </div>

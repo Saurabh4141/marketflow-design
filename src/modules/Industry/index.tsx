@@ -2,19 +2,22 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageHero } from "@/components/layout/PageHero";
-import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
+import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Button } from "@/components/ui/button";
 import { PaginationControls } from "@/components/ui/PaginationControls";
-import { FilterSidebar, FloatingFilterButton } from "@/components/filters/FilterSidebar";
+import { Input } from "@/components/ui/input";
 import { 
-  Download, 
-  Eye, 
+  Search, 
   TrendingUp, 
   Clock, 
   ArrowRight,
   BarChart3,
   Users,
-  ChevronRight
+  ChevronRight,
+  ChevronDown,
+  FileText,
+  Menu,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { 
@@ -52,7 +55,8 @@ const Industry = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [sidebarSearch, setSidebarSearch] = useState("");
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   const industry = slug ? getIndustryBySlug(slug) : null;
   const detail = slug ? getIndustryDetailBySlug(slug) : null;
@@ -106,15 +110,12 @@ const Industry = () => {
     setCurrentPage(1);
   };
 
-  const handleClearFilters = () => {
-    setSearchQuery("");
-    setCurrentPage(1);
-  };
-
-  // Categories for filter pills
-  const categories = ["All Reports", ...industries.map(i => i.title)];
-  const activeCategory = slug && detail ? detail.title : "All Reports";
-  const hasActiveFilters = searchQuery.length > 0 || (slug && slug.length > 0);
+  // Filter industries for sidebar
+  const filteredIndustries = useMemo(() => {
+    return industries.filter(i => 
+      i.title.toLowerCase().includes(sidebarSearch.toLowerCase())
+    );
+  }, [sidebarSearch]);
 
   // If we have a slug but no matching industry, show 404-like message
   if (slug && !industry) {
@@ -131,44 +132,32 @@ const Industry = () => {
     );
   }
 
+  // Truncate description helper
+  const truncateText = (text: string, maxLength: number = 120) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength).trim() + "...";
+  };
+
   return (
     <PageLayout>
-      {/* Floating Filter Button */}
-      <FloatingFilterButton 
-        onClick={() => setIsFilterOpen(true)} 
-        hasActiveFilters={!!hasActiveFilters}
-      />
-
-      {/* Filter Sidebar */}
-      <FilterSidebar
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        categories={categories}
-        activeCategory={activeCategory}
-        industries={industries}
-        onClearFilters={handleClearFilters}
-      />
-
       {/* Breadcrumb */}
-      <div className="bg-secondary/30 border-b border-border">
+      <nav aria-label="Breadcrumb" className="bg-secondary/30 border-b border-border">
         <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-            <ChevronRight className="w-4 h-4" />
+          <ol className="flex items-center gap-2 text-sm text-muted-foreground">
+            <li><a href="/" className="hover:text-primary transition-colors">Home</a></li>
+            <li><ChevronRight className="w-4 h-4" aria-hidden="true" /></li>
             {slug && detail ? (
               <>
-                <Link to="/industry" className="hover:text-primary transition-colors">Industries</Link>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-foreground font-medium">{detail.title}</span>
+                <li><a href="/industry" className="hover:text-primary transition-colors">Industries</a></li>
+                <li><ChevronRight className="w-4 h-4" aria-hidden="true" /></li>
+                <li><span className="text-foreground font-medium">{detail.title}</span></li>
               </>
             ) : (
-              <span className="text-foreground font-medium">Industries</span>
+              <li><span className="text-foreground font-medium">All Reports</span></li>
             )}
-          </nav>
+          </ol>
         </div>
-      </div>
+      </nav>
 
       <PageHero
         badge={slug && detail ? detail.title : "Industry Research"}
@@ -227,96 +216,237 @@ const Industry = () => {
         </section>
       )}
 
-      {/* Reports Grid */}
-      <section className="py-16">
+      {/* Main Content with Sidebar */}
+      <section className="py-8 md:py-16">
         <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                  {slug && detail ? `${detail.title} Reports` : "All Reports"}
-                </h2>
-                <p className="text-muted-foreground mt-1">
-                  Showing <span className="font-medium text-foreground">{paginatedReports.length}</span> of{" "}
-                  <span className="font-medium text-foreground">{totalItems}</span> reports
-                </p>
-              </div>
-              {slug && (
-                <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all">
-                  View All Reports <ArrowRight className="w-4 h-4" />
-                </Link>
-              )}
+          <div className="flex flex-col lg:flex-row gap-8">
+            
+            {/* Mobile Sidebar Toggle */}
+            <div className="lg:hidden">
+              <Button 
+                variant="outline" 
+                className="w-full justify-between"
+                onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+              >
+                <span className="flex items-center gap-2">
+                  <Menu className="w-4 h-4" />
+                  Browse Industries
+                </span>
+                <ChevronDown className={cn("w-4 h-4 transition-transform", isMobileSidebarOpen && "rotate-180")} />
+              </Button>
             </div>
-          </AnimatedSection>
 
-          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedReports.map((report) => (
-              <StaggerItem key={`${report.industrySlug}-${report.slug}`}>
-                <Link to={`/report/${report.slug}`} className="block h-full">
-                  <article className="group h-full p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-card hover:shadow-card-hover transition-all duration-300">
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <Link 
-                        to={`/industry/${report.industrySlug}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className={cn("px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity", categoryColors[report.category] || "bg-gray-100 text-gray-700")}
+            {/* Sidebar - Industries List */}
+            <aside className={cn(
+              "lg:w-72 xl:w-80 flex-shrink-0",
+              "lg:block",
+              isMobileSidebarOpen ? "block" : "hidden"
+            )}>
+              <div className="sticky top-24 bg-card border border-border rounded-2xl p-4 shadow-lg">
+                {/* Sidebar Header */}
+                <div className="flex items-center justify-between mb-4 lg:mb-4">
+                  <h3 className="font-display font-semibold text-foreground">Industries</h3>
+                  <button 
+                    className="lg:hidden p-1 hover:bg-secondary rounded"
+                    onClick={() => setIsMobileSidebarOpen(false)}
+                    aria-label="Close sidebar"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Sidebar Search */}
+                <div className="relative mb-4">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search industries..."
+                    value={sidebarSearch}
+                    onChange={(e) => setSidebarSearch(e.target.value)}
+                    className="pl-9 h-10 text-sm"
+                  />
+                </div>
+
+                {/* All Reports Link */}
+                <nav aria-label="Industry navigation" className="space-y-1 max-h-[60vh] overflow-y-auto">
+                  <a
+                    href="/industry"
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      !slug 
+                        ? "bg-primary text-primary-foreground" 
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    )}
+                  >
+                    <FileText className="w-4 h-4 flex-shrink-0" />
+                    <span>All Reports</span>
+                    <span className="ml-auto text-xs opacity-70">{allReports.length}</span>
+                  </a>
+
+                  {/* Industry Links */}
+                  {filteredIndustries.map((ind) => {
+                    const Icon = ind.icon;
+                    const reportCount = industryDetails[ind.slug]?.reports.length || 0;
+                    const isActive = slug === ind.slug;
+                    
+                    return (
+                      <a
+                        key={ind.slug}
+                        href={ind.href}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                          isActive 
+                            ? "bg-primary text-primary-foreground font-medium" 
+                            : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                        )}
+                      >
+                        <Icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="truncate">{ind.title}</span>
+                        <span className="ml-auto text-xs opacity-70">{reportCount}</span>
+                      </a>
+                    );
+                  })}
+                </nav>
+              </div>
+            </aside>
+
+            {/* Main Content - Reports */}
+            <main className="flex-1 min-w-0">
+              {/* Reports Header with Search */}
+              <div className="mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                  <div>
+                    <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                      {slug && detail ? `${detail.title} Reports` : "All Market Reports"}
+                    </h1>
+                    <p className="text-muted-foreground mt-1">
+                      Showing <span className="font-medium text-foreground">{paginatedReports.length}</span> of{" "}
+                      <span className="font-medium text-foreground">{totalItems}</span> reports
+                    </p>
+                  </div>
+                  {slug && (
+                    <a href="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all text-sm">
+                      View All <ArrowRight className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+
+                {/* Report Search */}
+                <div className="relative max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search reports..."
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="pl-9 h-11"
+                  />
+                </div>
+              </div>
+
+              {/* Reports List - Vertical Cards */}
+              <div className="space-y-4">
+                {paginatedReports.map((report) => (
+                  <article 
+                    key={`${report.industrySlug}-${report.slug}`}
+                    className="p-5 md:p-6 rounded-xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-md transition-all"
+                  >
+                    {/* Category & Growth Badge */}
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                      <a 
+                        href={`/industry/${report.industrySlug}`}
+                        className={cn(
+                          "px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity",
+                          categoryColors[report.category] || "bg-gray-100 text-gray-700"
+                        )}
                       >
                         {report.category}
-                      </Link>
-                      <div className="flex items-center gap-1 text-emerald-600 text-sm font-medium">
-                        <TrendingUp className="w-4 h-4" />
+                      </a>
+                      <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
+                        <TrendingUp className="w-3 h-3" />
                         {report.growth}
-                      </div>
+                      </span>
                     </div>
 
-                    <h3 className="font-display text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors line-clamp-2">
-                      {report.title}
-                    </h3>
+                    {/* Title */}
+                    <h2 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
+                      <a href={`/report/${report.slug}`} className="hover:underline">
+                        {report.title}
+                      </a>
+                    </h2>
 
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                    {/* Description */}
+                    <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                      {truncateText(`Comprehensive market analysis covering trends, competitive landscape, growth drivers, and future outlook for the ${report.title.toLowerCase()} sector.`, 140)}
+                      <a href={`/report/${report.slug}`} className="text-primary font-medium ml-1 hover:underline">
+                        Read more
+                      </a>
+                    </p>
+
+                    {/* Meta Info */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
                       <span className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4" />
                         {report.date}
                       </span>
                       <span>{report.pages} pages</span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-border">
-                      <span className="font-display text-xl font-bold text-foreground">
+                      <span className="font-display font-bold text-foreground text-base">
                         {report.price}
                       </span>
-                      <div className="flex gap-2">
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap gap-3">
+                      <a href={`/report/${report.slug}`}>
+                        <Button variant="gradient" size="sm">
+                          Buy Now
+                          <ArrowRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </a>
+                      <a href={`/report/${report.slug}`}>
                         <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4" />
+                          Read More
                         </Button>
-                        <Button variant="default" size="sm">
-                          <Download className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      </a>
                     </div>
                   </article>
-                </Link>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+                ))}
+              </div>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-12">
-              <PaginationControls
-                currentPage={currentPage}
-                totalPages={totalPages}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                onPageChange={setCurrentPage}
-                onPageSizeChange={handlePageSizeChange}
-              />
-            </div>
-          )}
+              {/* Empty State */}
+              {paginatedReports.length === 0 && (
+                <div className="text-center py-16">
+                  <FileText className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-foreground mb-2">No reports found</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Try adjusting your search or browse all industries.
+                  </p>
+                  <a href="/industry">
+                    <Button variant="outline">View All Reports</Button>
+                  </a>
+                </div>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-8 pt-6 border-t border-border">
+                  <PaginationControls
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    totalItems={totalItems}
+                    onPageChange={setCurrentPage}
+                    onPageSizeChange={handlePageSizeChange}
+                  />
+                </div>
+              )}
+            </main>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20">
+      <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4 text-center">
           <AnimatedSection>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -325,11 +455,11 @@ const Industry = () => {
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Our team can create tailored research solutions specific to your {slug && detail ? detail.title.toLowerCase() : "industry"} business needs.
             </p>
-            <Link to="/contact">
+            <a href="/contact">
               <Button variant="gradient" size="xl">
                 Request Custom Research
               </Button>
-            </Link>
+            </a>
           </AnimatedSection>
         </div>
       </section>
