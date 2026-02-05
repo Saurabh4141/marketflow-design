@@ -10,7 +10,7 @@ import {
   IndustryBreadcrumb,
   IndustryCTA 
 } from "./components";
-import { getIndustryBySlug, getIndustryDetailBySlug } from "@/data/industries";
+ import { getIndustryBySlug, getIndustryDetailBySlug, getSubIndustryBySlug } from "@/data/industries";
 
 // Dynamic page hero - memoized to prevent unnecessary re-renders
 const DynamicPageHero = memo(({ 
@@ -67,7 +67,7 @@ const Industry = () => {
   
   // Memoize industry lookups to prevent unnecessary recalculations
   const industry = useMemo(() => 
-    slug ? getIndustryBySlug(slug) : null, 
+     slug ? getIndustryBySlug(slug) || getSubIndustryBySlug(slug) : null, 
     [slug]
   );
   
