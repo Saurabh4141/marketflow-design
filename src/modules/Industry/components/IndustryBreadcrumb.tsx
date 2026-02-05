@@ -1,11 +1,15 @@
 import { memo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import { getIndustryDetailBySlug } from "@/data/industries";
+ import { getIndustryDetailBySlug, getSubIndustryBySlug } from "@/data/industries";
 
 const IndustryBreadcrumb = memo(() => {
   const { slug } = useParams<{ slug: string }>();
   const detail = slug ? getIndustryDetailBySlug(slug) : null;
+   const subIndustryResult = slug ? getSubIndustryBySlug(slug) : null;
+ 
+   const displayTitle = detail?.title || subIndustryResult?.name;
+   const parentIndustry = subIndustryResult?.parentIndustry;
 
   return (
     <nav aria-label="Breadcrumb" className="bg-secondary/30 border-b border-border">
@@ -17,7 +21,7 @@ const IndustryBreadcrumb = memo(() => {
             </Link>
           </li>
           <li><ChevronRight className="w-4 h-4" aria-hidden="true" /></li>
-          {slug && detail ? (
+           {slug && displayTitle ? (
             <>
               <li>
                 <Link to="/industry" className="hover:text-primary transition-colors">
@@ -25,8 +29,18 @@ const IndustryBreadcrumb = memo(() => {
                 </Link>
               </li>
               <li><ChevronRight className="w-4 h-4" aria-hidden="true" /></li>
+               {parentIndustry && (
+                 <>
+                   <li>
+                     <Link to={`/industry/${parentIndustry.path}`} className="hover:text-primary transition-colors">
+                       {parentIndustry.name}
+                     </Link>
+                   </li>
+                   <li><ChevronRight className="w-4 h-4" aria-hidden="true" /></li>
+                 </>
+               )}
               <li>
-                <span className="text-foreground font-medium">{detail.title}</span>
+                 <span className="text-foreground font-medium">{displayTitle}</span>
               </li>
             </>
           ) : (

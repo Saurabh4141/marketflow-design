@@ -5,7 +5,7 @@ import {
   BarChart3, 
   Users 
 } from "lucide-react";
-import { IndustryDetail } from "@/data/industries";
+ import type { IndustryDetail } from "@/data/industries";
 
 interface IndustryHeroContentProps {
   detail: IndustryDetail | null;

@@ -10,7 +10,7 @@ import {
   ArrowRight 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { industryDetails, getIndustryDetailBySlug } from "@/data/industries";
+ import { industriesData, getIndustryDetailBySlug, getSubIndustryBySlug } from "@/data/industries";
 
 // Category color mapping
 const categoryColors: Record<string, string> = {
@@ -127,29 +127,41 @@ const IndustryReportsList = memo(() => {
   const [pageSize, setPageSize] = useState(20);
 
   const detail = slug ? getIndustryDetailBySlug(slug) : null;
+   const subIndustryResult = slug ? getSubIndustryBySlug(slug) : null;
 
   // Get all reports from all industries
   const allReports = useMemo(() => 
-    Object.entries(industryDetails).flatMap(([industrySlug, industryData]) => 
-      industryData.reports.map(report => ({
-        ...report,
-        category: industryData.title,
-        industrySlug
-      }))
-    ), []
+     industriesData.flatMap(ind => {
+       const indReports = ind.reports.map(r => ({ ...r, category: ind.name, industrySlug: ind.path }));
+       const subReports = ind.subIndustries.flatMap(sub => 
+         sub.reports.map(r => ({ ...r, category: sub.name, industrySlug: sub.path }))
+       );
+       return [...indReports, ...subReports];
+     }), []
   );
 
   // Determine which reports to show based on slug
   const baseReports = useMemo(() => {
-    if (slug && detail) {
-      return detail.reports.map(report => ({
-        ...report,
-        category: detail.title,
-        industrySlug: slug
-      }));
+     if (slug) {
+       // Check if it's a sub-industry
+       if (subIndustryResult) {
+         return subIndustryResult.reports.map(report => ({
+           ...report,
+           category: subIndustryResult.name,
+           industrySlug: slug
+         }));
+       }
+       // Check if it's a main industry
+       if (detail) {
+         return detail.reports.map(report => ({
+           ...report,
+           category: detail.title,
+           industrySlug: slug
+         }));
+       }
     }
     return allReports;
-  }, [slug, detail, allReports]);
+   }, [slug, detail, subIndustryResult, allReports]);
 
   // Filter reports based on search
   const filteredReports = useMemo(() => {
@@ -188,7 +200,7 @@ const IndustryReportsList = memo(() => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-              {slug && detail ? `${detail.title} Reports` : "All Market Reports"}
+               {slug && detail ? `${detail.title} Reports` : slug && subIndustryResult ? `${subIndustryResult.name} Reports` : "All Market Reports"}
             </h1>
             <p className="text-muted-foreground mt-1">
               Showing <span className="font-medium text-foreground">{paginatedReports.length}</span> of{" "}
