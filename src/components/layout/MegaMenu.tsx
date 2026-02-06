@@ -1,23 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Car,
-  ShoppingBag,
-  UtensilsCrossed,
-  FlaskConical,
-  Cpu,
-  Factory,
-  Wrench,
-  Pill,
-  Hospital,
-  Syringe,
-  Stethoscope,
-  Shield,
-  CircuitBoard,
-  Wheat,
-  Package,
-  Zap,
-  Building2,
-  Home,
   PieChart,
   BarChart3,
   Brain,
@@ -30,33 +12,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
-
-interface MegaMenuProps {
-  type: "industries" | "services";
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const industries = [
-  { icon: Car, title: "Automobile & Transportation", description: "Vehicles, logistics, mobility solutions", href: "/industry/automobile-transportation" },
-  { icon: ShoppingBag, title: "Consumer Products", description: "Retail, lifestyle, consumer goods", href: "/industry/consumer-products" },
-  { icon: UtensilsCrossed, title: "Food, Beverage & Nutrition", description: "Food processing, beverages, nutrition", href: "/industry/food-beverage-nutrition" },
-  { icon: FlaskConical, title: "Chemicals & Materials", description: "Specialty chemicals, raw materials", href: "/industry/chemicals-materials" },
-  { icon: Cpu, title: "Technology", description: "Software, hardware, digital solutions", href: "/industry/technology" },
-  { icon: Factory, title: "Industrial Automation", description: "Manufacturing, robotics, automation", href: "/industry/industrial-automation" },
-  { icon: Wrench, title: "Services & Utilities", description: "Business services, utilities", href: "/industry/services-utilities" },
-  { icon: Pill, title: "Pharmaceutical", description: "Drugs, therapeutics, life sciences", href: "/industry/pharmaceutical" },
-  { icon: Hospital, title: "Healthcare IT & Services", description: "Health tech, medical services", href: "/industry/healthcare-it-services" },
-  { icon: Syringe, title: "Medical Devices Consumables", description: "Disposables, consumable devices", href: "/industry/medical-devices-consumables" },
-  { icon: Stethoscope, title: "Medical Devices", description: "Equipment, diagnostic devices", href: "/industry/medical-devices" },
-  { icon: Shield, title: "IT Security & Software", description: "Cybersecurity, enterprise software", href: "/industry/it-security-software" },
-  { icon: CircuitBoard, title: "Electronics-Semiconductor", description: "Chips, components, electronics", href: "/industry/electronics-semiconductor" },
-  { icon: Wheat, title: "Agriculture", description: "Farming, agritech, crop science", href: "/industry/agriculture" },
-  { icon: Package, title: "Packaging & Transport", description: "Logistics, packaging solutions", href: "/industry/packaging-transport" },
-  { icon: Zap, title: "Energy & Power", description: "Power generation, renewables, oil & gas", href: "/industry/energy-power" },
-  { icon: Building2, title: "Construction", description: "Infrastructure, real estate, construction", href: "/industry/construction" },
-  { icon: Home, title: "Daily-Necessities", description: "Household essentials, daily products", href: "/industry/daily-necessities" },
-];
+import { industries } from "@/data/industries";
 
 const services = [
   { icon: PieChart, title: "Market Segmentation Analysis", description: "Identify and understand target segments", href: "/services/market-segmentation-analysis" },
@@ -70,8 +26,16 @@ const services = [
   { icon: MessageCircle, title: "Social Media and Sentiment Analysis", description: "Monitor brand perception online", href: "/services/social-media-sentiment-analysis" },
 ];
 
+interface MegaMenuProps {
+  type: "industries" | "services";
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 export const MegaMenu = ({ type, isOpen, onClose }: MegaMenuProps) => {
-  const items = type === "industries" ? industries : services;
+  const items = type === "industries" 
+    ? industries.map(ind => ({ icon: ind.icon, title: ind.title, description: ind.description, href: ind.href }))
+    : services;
 
   return (
     <AnimatePresence>
