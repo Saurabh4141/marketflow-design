@@ -30,6 +30,7 @@ const AnimatedRoutes = () => {
         <Route path="/industry" element={<Industry />} />
         <Route path="/industry/:slug" element={<Industry />} />
         <Route path="/report/:slug" element={<ReportDetail />} />
+        <Route path="/report/:industry/:subIndustry/:reportSlug" element={<ReportDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

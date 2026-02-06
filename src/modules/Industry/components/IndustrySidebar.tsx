@@ -8,47 +8,46 @@ import {
   FileText, 
   Menu, 
   X,
-   ChevronDown,
-   ChevronRight
+  ChevronDown,
+  ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
- import { industriesData, getIndustryDetailBySlug } from "@/data/industries";
- import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { industriesData } from "@/data/industries";
+import { getReportsCountByIndustry, getReportsCountBySubIndustry, getTotalReportsCount } from "@/data/reports";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface IndustrySidebarProps {
   className?: string;
 }
 
- // Sub-industry item component
- const SubIndustryItem = memo(({ 
-   subIndustry, 
-   isActive,
-   parentPath
- }: { 
-   subIndustry: { name: string; path: string; icon: React.ComponentType<{ className?: string }>; reports: unknown[] };
-   isActive: boolean;
-   parentPath: string;
- }) => {
-   const Icon = subIndustry.icon;
-   const reportCount = subIndustry.reports?.length || 0;
- 
+// Sub-industry item component
+const SubIndustryItem = memo(({ 
+  subIndustry, 
+  isActive
+}: { 
+  subIndustry: { name: string; path: string; icon: React.ComponentType<{ className?: string }> };
+  isActive: boolean;
+}) => {
+  const Icon = subIndustry.icon;
+  const reportCount = getReportsCountBySubIndustry(subIndustry.path);
+
   return (
     <Link
-       to={`/industry/${subIndustry.path}`}
+      to={`/industry/${subIndustry.path}`}
       className={cn(
-         "flex items-center gap-3 pl-10 pr-3 py-2 rounded-lg text-sm transition-colors",
+        "flex items-center gap-3 pl-10 pr-3 py-2 rounded-lg text-sm transition-colors",
         isActive 
           ? "bg-primary text-primary-foreground font-medium" 
           : "text-muted-foreground hover:text-foreground hover:bg-secondary"
       )}
     >
-       <Icon className="w-3.5 h-3.5 flex-shrink-0" />
-       <span className="truncate text-xs">{subIndustry.name}</span>
+      <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+      <span className="truncate text-xs">{subIndustry.name}</span>
       <span className="ml-auto text-xs opacity-70">{reportCount}</span>
     </Link>
   );
 });
- SubIndustryItem.displayName = "SubIndustryItem";
+SubIndustryItem.displayName = "SubIndustryItem";
 
  // Industry item with collapsible sub-industries
  const IndustryItem = memo(({ 
@@ -62,15 +61,14 @@ interface IndustrySidebarProps {
    isParentActive: boolean;
    currentSlug: string | undefined;
  }) => {
-   const [isOpen, setIsOpen] = useState(isActive || isParentActive);
-   const Icon = industry.icon;
-   const hasSubIndustries = industry.subIndustries.length > 0;
-   
-   // Calculate total reports (industry + all sub-industries)
-   const totalReports = industry.reports.length + 
-     industry.subIndustries.reduce((acc, sub) => acc + sub.reports.length, 0);
- 
-   if (!hasSubIndustries) {
+  const [isOpen, setIsOpen] = useState(isActive || isParentActive);
+  const Icon = industry.icon;
+  const hasSubIndustries = industry.subIndustries.length > 0;
+  
+  // Calculate total reports from reports.ts
+  const totalReports = getReportsCountByIndustry(industry.path);
+
+  if (!hasSubIndustries) {
      // Simple link for industries without sub-industries
      return (
        <Link
@@ -125,15 +123,14 @@ interface IndustrySidebarProps {
            </Link>
          </div>
          
-         <CollapsibleContent className="space-y-0.5">
-           {industry.subIndustries.map((sub) => (
-             <SubIndustryItem
-               key={sub.id}
-               subIndustry={sub}
-               isActive={currentSlug === sub.path}
-               parentPath={industry.path}
-             />
-           ))}
+        <CollapsibleContent className="space-y-0.5">
+          {industry.subIndustries.map((sub) => (
+            <SubIndustryItem
+              key={sub.id}
+              subIndustry={sub}
+              isActive={currentSlug === sub.path}
+            />
+          ))}
          </CollapsibleContent>
        </div>
      </Collapsible>
@@ -173,16 +170,9 @@ const IndustrySidebar = memo(({ className }: IndustrySidebarProps) => {
   const [sidebarSearch, setSidebarSearch] = useState("");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // Get total report count
-  const allReportsCount = useMemo(() => 
-     industriesData.reduce((acc, ind) => {
-       const indReports = ind.reports.length;
-       const subReports = ind.subIndustries.reduce((subAcc, sub) => subAcc + sub.reports.length, 0);
-       return acc + indReports + subReports;
-     }, 0),
-    []
-  );
- 
+  // Get total report count from reports.ts
+  const allReportsCount = useMemo(() => getTotalReportsCount(), []);
+
    // Check if current slug is a sub-industry
    const parentIndustryPath = useMemo(() => {
      for (const ind of industriesData) {
