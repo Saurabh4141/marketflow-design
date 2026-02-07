@@ -9,6 +9,7 @@ export interface OfficeLocation {
 }
 
 export interface CompanyInfo {
+  name: string;
   headquarter: OfficeLocation;
   globalOffices: OfficeLocation[];
   phone: string;
@@ -21,6 +22,7 @@ export interface CompanyInfo {
 }
 
 export const companyInfo: CompanyInfo = {
+  name: "Core Market Research",
   headquarter: {
     name: "Headquarters",
     address: "Empire State Building, NYC",

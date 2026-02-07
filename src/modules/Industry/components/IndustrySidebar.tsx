@@ -203,11 +203,11 @@ const IndustrySidebar = memo(({ className }: IndustrySidebarProps) => {
       {/* Sidebar */}
       <aside className={cn(
         "lg:w-72 xl:w-80 flex-shrink-0",
-        "lg:block",
+        "lg:block lg:sticky lg:top-20 lg:h-[calc(100vh-5rem)] lg:self-start",
         isMobileOpen ? "block" : "hidden",
         className
       )}>
-        <div className="lg:sticky lg:top-24 bg-card border border-border rounded-2xl p-4 shadow-lg lg:max-h-[calc(100vh-8rem)] lg:flex lg:flex-col">
+        <div className="bg-card border border-border rounded-2xl p-4 shadow-lg h-full flex flex-col overflow-hidden">
           {/* Sidebar Header */}
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-display font-semibold text-foreground">Industries</h3>
@@ -233,7 +233,7 @@ const IndustrySidebar = memo(({ className }: IndustrySidebarProps) => {
           </div>
 
           {/* Scrollable Industry List */}
-          <ScrollArea className="flex-1 lg:max-h-[60vh]">
+          <ScrollArea className="flex-1 min-h-0">
             <nav aria-label="Industry navigation" className="space-y-1 pr-2">
               {/* All Reports Link */}
               <Link

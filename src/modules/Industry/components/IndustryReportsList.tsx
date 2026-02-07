@@ -103,7 +103,7 @@ const ReportCard = memo(({ report }: {
 
     {/* Action Buttons */}
     <div className="flex flex-wrap gap-3">
-      <Link to={`/report/${report.slug}`}>
+      <Link to={`/checkout/${report.slug}`}>
         <Button variant="gradient" size="sm">
           Buy Now
           <ArrowRight className="w-4 h-4 ml-1" />
