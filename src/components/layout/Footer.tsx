@@ -47,10 +47,12 @@ const footerLinks = {
     { label: "Contact", href: "/contact" },
   ],
   legal: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Cookie Policy", href: "/cookies" },
+    { label: "Privacy Policy", href: "/privacy-policy" },
+    { label: "Terms & Conditions", href: "/terms-and-conditions" },
+    { label: "Cookie Policy", href: "/cookie-policy" },
     { label: "Disclaimer", href: "/disclaimer" },
+    { label: "Refund Policy", href: "/refund-policy" },
+    { label: "GDPR", href: "/gdpr" },
   ],
 };
 

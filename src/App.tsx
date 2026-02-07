@@ -12,6 +12,15 @@ import Blog from "@/modules/Blog/index";
 import BlogDetail from "@/modules/Blog/BlogDetail";
 import Services from "@/modules/Services/index";
 import ServiceDetail from "@/modules/Services/ServiceDetail";
+import Checkout from "@/modules/Checkout/index";
+import { 
+  PrivacyPolicy, 
+  TermsAndConditions, 
+  CookiePolicy, 
+  Disclaimer, 
+  RefundPolicy, 
+  GDPR 
+} from "@/modules/Legal";
 import { Error404 } from "./error";
 
 const queryClient = new QueryClient();
@@ -33,6 +42,14 @@ const AnimatedRoutes = () => {
         <Route path="/report/:industry/:subIndustry/:reportSlug" element={<ReportDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout/:slug" element={<Checkout />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
+        <Route path="/gdpr" element={<GDPR />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<Error404 />} />
       </Routes>
