@@ -345,7 +345,7 @@ export const industriesData: Industry[] = [
   {
     id: "ict",
     icon: Cpu,
-    name: "Information & Communications Technology",
+    name: "ICT",
     rephrasedName: "ICT Industry",
     path: "ict",
     initial: "ICT",

@@ -53,6 +53,7 @@ const InfoBadge = ({
 
 // Tabs Component
 const tabs = [
+  "Overview",
   "Description",
   "Segmentation",
   "TOC",
@@ -86,7 +87,7 @@ const relatedReports = [
 ];
 
 const ReportDetail = () => {
-  const [activeTab, setActiveTab] = useState("Description");
+  const [activeTab, setActiveTab] = useState("Overview");
   const [isTabsSticky, setIsTabsSticky] = useState(false);
   const tabsRef = useRef<HTMLDivElement>(null);
   const tabsPlaceholderRef = useRef<HTMLDivElement>(null);
@@ -123,6 +124,72 @@ const ReportDetail = () => {
   // Tab content render function
   const renderTabContent = () => {
     switch (activeTab) {
+       case "Overview":
+        return (
+          <div className="space-y-4 sm:space-y-6">
+            {/* Report Description */}
+            <Card>
+              <div className="p-4 sm:p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-1 h-5 sm:h-6 bg-[#1e3a5f] rounded-full"></div>
+                  <span className="text-xs sm:text-sm font-semibold text-[#1e3a5f]">
+                    Key Market Highlights
+                  </span>
+                </div>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed mb-4">
+                  An in-depth overview of the Zoster Vaccine Live market, highlighting key drivers, restraints, challenges,
+                  and opportunities shaping the market landscape. Learn about the key industry trends, competitive
+                  environment, and growth prospects.
+                </p>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500">
+                    <Shield className="w-4 h-4" />
+                    Trusted by industry professionals worldwide
+                  </div>
+                  <button className="inline-flex items-center gap-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Read More
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </Card>
+
+            {/* Market Snapshot */}
+            <Card>
+              <div className="p-4 sm:p-5 border-b border-gray-100">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Market Snapshot</h3>
+              </div>
+              <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                  <div className="p-3 sm:p-4 bg-sky-50 rounded-xl border border-sky-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <BarChart3 className="w-4 sm:w-5 h-4 sm:h-5 text-[#1e3a5f]" />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900">
+                      <span className="text-[#1e3a5f]">$3.5</span> Billion
+                    </div>
+                    <div className="text-xs sm:text-sm text-gray-500">(2023)</div>
+                  </div>
+                  <div className="p-3 sm:p-4 bg-sky-50 rounded-xl border border-sky-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp className="w-4 sm:w-5 h-4 sm:h-5 text-[#1e3a5f]" />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900">7.8%</div>
+                    <div className="text-xs sm:text-sm text-gray-500">CAGR (2024–2030)</div>
+                  </div>
+                  <div className="p-3 sm:p-4 bg-sky-50 rounded-xl border border-sky-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Calendar className="w-4 sm:w-5 h-4 sm:h-5 text-[#1e3a5f]" />
+                    </div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900">2024–2030</div>
+                    <div className="text-xs sm:text-sm text-gray-500">Forecast Period</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        );
+
       case "Description":
         return (
           <div className="space-y-4 sm:space-y-6">

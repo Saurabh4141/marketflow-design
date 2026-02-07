@@ -13,7 +13,7 @@ import Logo from "@/assets/logo.png";
 const navItems = [
   { label: "Home", href: "/", activeMatch: "exact" as const },
   {
-    label: "Industries",
+    label: "Report Store",
     href: "/industry",
     hasMegaMenu: true,
     menuType: "industries" as const,
@@ -26,7 +26,6 @@ const navItems = [
     menuType: "services" as const,
     activeMatch: "prefix" as const,
   },
-  { label: "Reports", href: "/industry", activeMatch: "nested" as const }, // Active on /industry/:slug
   { label: "Blog", href: "/blog", activeMatch: "prefix" as const },
   { label: "About", href: "/about", activeMatch: "exact" as const },
   { label: "Contact", href: "/contact", activeMatch: "exact" as const },
@@ -139,12 +138,12 @@ export const Header = () => {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
-                <span className="text-primary-foreground font-display font-bold text-lg md:text-xl">
+                <span className="">
                    <img
-          src={Logo}
-          alt="Market Research Visualization"
-          className="w-full h-full object-cover"
-        />
+                      src={Logo}
+                      alt="Market Research Visualization"
+                      className="w-full h-full object-cover"
+                    />
                 </span>
               </div>
               <div className="hidden sm:block">
