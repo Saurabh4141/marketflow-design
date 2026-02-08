@@ -17,7 +17,7 @@ const navItems = [
     href: "/industry",
     hasMegaMenu: true,
     menuType: "industries" as const,
-    activeMatch: "exact" as const, // Only active on /industry exactly
+    activeMatch: "prefix" as const, // Active on /industry and all nested routes like /industry/healthcare
   },
   {
     label: "Services",
@@ -134,10 +134,10 @@ export const Header = () => {
         )}
       >
         <div className="container mx-auto px-4 relative">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
                 <span className="">
                    <img
                       src={Logo}
@@ -146,11 +146,11 @@ export const Header = () => {
                     />
                 </span>
               </div>
-              <div className="hidden sm:block">
-                <span className="font-display font-bold text-lg md:text-xl text-foreground">
+              <div className="hidden xs:block sm:block">
+                <span className="font-display font-bold text-base sm:text-lg md:text-xl text-foreground">
                   Core
                 </span>
-                <span className="font-display font-medium text-lg md:text-xl text-primary ml-1">
+                <span className="font-display font-medium text-base sm:text-lg md:text-xl text-primary ml-1">
                   Market Research
                 </span>
               </div>
@@ -202,22 +202,22 @@ export const Header = () => {
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-2 md:gap-3">
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+                className="p-1.5 sm:p-2 text-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
               >
-                <Search className="w-5 h-5" />
+                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
 
               <Link to="/login">
-                <Button variant="gradient_2" size="sm" className="hidden sm:flex">
+                <Button variant="gradient_2" size="sm" className="hidden md:flex text-xs md:text-sm px-2 md:px-4">
                   Login
                 </Button>
               </Link>
 
               <Link to="/contact">
-                <Button variant="gradient" size="sm" className="hidden sm:flex">
+                <Button variant="gradient" size="sm" className="hidden sm:flex text-xs md:text-sm px-2 md:px-4">
                   Request Quote
                 </Button>
               </Link>
@@ -225,12 +225,12 @@ export const Header = () => {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden p-2 text-foreground/70 hover:text-primary transition-colors"
+                className="lg:hidden p-1.5 sm:p-2 text-foreground/70 hover:text-primary transition-colors"
               >
                 {isMobileMenuOpen ? (
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 ) : (
-                  <Menu className="w-6 h-6" />
+                  <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </button>
             </div>
