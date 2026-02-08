@@ -3,7 +3,7 @@
    Maps to: report_sections table
 ===================================================== */
 
-export type SectionGroup = 'about' | 'market_overview' | 'deep_dive' | 'reference';
+export type SectionGroup = 'market_overview' | 'deep_dive' | 'reference';
 export type SectionType = 'content' | 'meta' | 'utility';
 
 export interface ReportSection {
@@ -25,25 +25,15 @@ export interface ReportSection {
 
 // Section group metadata for sidebar grouping
 export const sectionGroups: Record<SectionGroup, { label: string; priority: number }> = {
-  about: { label: 'ABOUT', priority: 1 },
-  market_overview: { label: 'MARKET OVERVIEW', priority: 2 },
-  deep_dive: { label: 'DEEP DIVE', priority: 3 },
-  reference: { label: 'REFERENCE', priority: 4 },
+  market_overview: { label: 'MARKET OVERVIEW', priority: 1 },
+  deep_dive: { label: 'DEEP DIVE', priority: 2 },
+  reference: { label: 'REFERENCE', priority: 3 },
 };
 
 // Default sections template for reports
 export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'created_at' | 'created_by' | 'updated_at' | 'updated_by'>[] = [
   // About Group
-  {
-    section_key: 'about_report',
-    section_title: 'About This Report',
-    section_group: 'about',
-    section_type: 'meta',
-    content: 'available',
-    display_order: 1,
-    is_visible: true,
-    is_collapsible: false,
-  },
+ 
   // Market Overview Group
   {
     section_key: 'market_size_share',
@@ -51,7 +41,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 2,
+    display_order: 1,
     is_visible: true,
     is_collapsible: false,
   },
@@ -61,7 +51,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 3,
+    display_order: 2,
     is_visible: true,
     is_collapsible: false,
   },
@@ -71,7 +61,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 4,
+    display_order: 3,
     is_visible: true,
     is_collapsible: false,
   },
@@ -81,7 +71,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 5,
+    display_order: 4,
     is_visible: true,
     is_collapsible: false,
   },
@@ -91,7 +81,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 6,
+    display_order: 5,
     is_visible: true,
     is_collapsible: false,
   },
@@ -101,7 +91,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'market_overview',
     section_type: 'content',
     content: 'available',
-    display_order: 7,
+    display_order: 6,
     is_visible: true,
     is_collapsible: false,
   },
@@ -112,7 +102,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'deep_dive',
     section_type: 'content',
     content: 'available',
-    display_order: 8,
+    display_order: 7,
     is_visible: true,
     is_collapsible: false,
   },
@@ -122,7 +112,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'deep_dive',
     section_type: 'content',
     content: 'available',
-    display_order: 9,
+    display_order: 8,
     is_visible: true,
     is_collapsible: false,
   },
@@ -133,7 +123,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'reference',
     section_type: 'utility',
     content: 'available',
-    display_order: 10,
+    display_order: 9,
     is_visible: true,
     is_collapsible: false,
   },
@@ -143,7 +133,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'reference',
     section_type: 'utility',
     content: 'available',
-    display_order: 11,
+    display_order: 10,
     is_visible: true,
     is_collapsible: false,
   },
@@ -153,7 +143,7 @@ export const defaultReportSections: Omit<ReportSection, 'id' | 'report_id' | 'cr
     section_group: 'reference',
     section_type: 'utility',
     content: 'available',
-    display_order: 12,
+    display_order: 11,
     is_visible: true,
     is_collapsible: false,
   },
@@ -175,7 +165,6 @@ export const generateReportSections = (reportId: number): ReportSection[] => {
 // Get sections grouped by section_group
 export const getSectionsGrouped = (sections: ReportSection[]): Record<SectionGroup, ReportSection[]> => {
   const grouped: Record<SectionGroup, ReportSection[]> = {
-    about: [],
     market_overview: [],
     deep_dive: [],
     reference: [],

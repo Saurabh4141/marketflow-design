@@ -40,42 +40,6 @@ const SectionHeader: React.FC<{ title: string; subtitle?: string }> = ({ title, 
   </div>
 );
 
-// About This Report Section
-const AboutSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
-  <Card>
-    <div className="p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-1 h-6 bg-[#1e3a5f] rounded-full" />
-        <span className="text-sm font-semibold text-[#1e3a5f]">About This Report</span>
-      </div>
-      <p className="text-gray-600 leading-relaxed mb-6">{report.description}</p>
-      
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 bg-gray-50 rounded-xl text-center">
-          <FileText className="w-6 h-6 text-[#1e3a5f] mx-auto mb-2" />
-          <div className="text-2xl font-bold text-gray-900">{report.pages}</div>
-          <div className="text-xs text-gray-500">Pages</div>
-        </div>
-        <div className="p-4 bg-gray-50 rounded-xl text-center">
-          <BarChart3 className="w-6 h-6 text-[#1e3a5f] mx-auto mb-2" />
-          <div className="text-2xl font-bold text-gray-900">{report.charts}</div>
-          <div className="text-xs text-gray-500">Charts</div>
-        </div>
-        <div className="p-4 bg-gray-50 rounded-xl text-center">
-          <Globe className="w-6 h-6 text-[#1e3a5f] mx-auto mb-2" />
-          <div className="text-2xl font-bold text-gray-900">{report.tables}</div>
-          <div className="text-xs text-gray-500">Tables</div>
-        </div>
-        <div className="p-4 bg-gray-50 rounded-xl text-center">
-          <Building className="w-6 h-6 text-[#1e3a5f] mx-auto mb-2" />
-          <div className="text-2xl font-bold text-gray-900">{report.companies_mentioned.length}</div>
-          <div className="text-xs text-gray-500">Companies</div>
-        </div>
-      </div>
-    </div>
-  </Card>
-);
-
 // Market Size & Share Section
 const MarketSizeSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
   <Card>
@@ -562,7 +526,6 @@ const FAQSection: React.FC<{ report: ReportDetail }> = ({ report }) => {
 // Main Section Content Component
 export const SectionContent: React.FC<SectionContentProps> = ({ report, section }) => {
   const sectionComponents: Record<string, React.ReactNode> = {
-    about_report: <AboutSection report={report} />,
     market_size_share: <MarketSizeSection report={report} />,
     market_analysis: <MarketAnalysisSection report={report} />,
     trends_insights: <TrendsSection report={report} />,

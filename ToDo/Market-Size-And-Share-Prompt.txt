@@ -1,0 +1,102 @@
+Create a clean, enterprise-grade infographic titled
+“Carboxytherapy Market Size and Share”.
+
+Overall Style:
+- Professional market research report design
+- White background
+- Minimal, modern, corporate look
+- Flat design only (NO shadows, NO gradients, NO 3D)
+- Clean grid alignment
+- Clear, readable typography
+- Suitable for a premium market research website
+- High-resolution, web-ready infographic
+
+Color Rules (IMPORTANT):
+- Use EXACTLY different colors for every chart segment
+- No repeated colors anywhere
+- Use a professional palette only:
+  deep blue, teal, orange, purple, green, red, gray
+- Ensure strong contrast and accessibility
+
+Layout:
+- Two-column layout
+- Thin vertical divider line between panels
+- Equal visual weight on both sides
+
+-------------------------------------------------
+LEFT PANEL – Market Size
+-------------------------------------------------
+Title:
+“Market Size”
+
+Visualization:
+- Vertical bar chart
+- Clean axes with clear labels
+- No grid clutter
+
+Data:
+- Year 2026: USD 137.46 Million
+- Year 2031: USD 264.27 Million
+
+Highlight:
+- Prominent text or badge:
+  “CAGR: 11.51%”
+
+Supporting Label (below chart):
+“Base Year: 2026 | Forecast Year: 2031”
+
+Insights (below chart as bullet points):
+• Largest Market: North America  
+• Fastest Growing: Asia-Pacific  
+
+-------------------------------------------------
+RIGHT PANEL – Market Share by Key Players
+-------------------------------------------------
+Title:
+“Market Share by Key Players”
+
+Visualization:
+- Donut or pie chart
+- Percentage values shown directly on chart segments
+- DO NOT show company names inside the chart
+
+Segments (use realistic distribution):
+- Cosmopro – 18%
+- Carbossi Terapia Italiana – 15%
+- DTA Medical – 13%
+- Jontelaser – 11%
+- Cosmo Carbossiterapia – 11%
+- Others – 32%
+
+Rules:
+- Exactly 6 segments total
+- Each segment must use a completely different color
+
+Legend (IMPORTANT – layout requirement):
+- Legend placed BELOW the chart
+- Arrange legend items in TWO COLUMNS
+- Each row should contain TWO color swatches with labels
+
+Legend Format Example:
+[■] Cosmopro – 18%        [■] Carbossi Terapia Italiana – 15%
+[■] DTA Medical – 13%    [■] Jontelaser – 11%
+[■] Cosmo Carbossiterapia – 11%   [■] Others – 32%
+
+Text below legend:
+“Market Concentration: Medium”
+“Top 5 players account for ~68%”
+
+-------------------------------------------------
+Footer
+-------------------------------------------------
+- Small, subtle text aligned bottom center:
+  “Source: Core Market Research”
+- No watermarks
+- No brand logos
+- No decorative icons
+
+Final Output Requirements:
+- Corporate, investor-ready visual
+- Balanced spacing
+- Precise alignment
+- Looks suitable for a paid market research report

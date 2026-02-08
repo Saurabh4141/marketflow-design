@@ -27,7 +27,6 @@ export const ReportSidebar: React.FC<ReportSidebarProps> = ({
   // Group sections by section_group
   const groupedSections = React.useMemo(() => {
     const grouped: Record<SectionGroup, ReportSection[]> = {
-      about: [],
       market_overview: [],
       deep_dive: [],
       reference: [],
