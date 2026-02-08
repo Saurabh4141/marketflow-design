@@ -184,11 +184,11 @@ const ReportDetail = () => {
 
             {/* Left Sidebar - Desktop Only */}
             <div
-              className={`hidden lg:block flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden ${
+              className={`hidden lg:block flex-shrink-0 transition-all duration-300 ease-in-out ${
                 sidebarVisible ? 'w-72 opacity-100' : 'w-0 opacity-0'
               }`}
             >
-              <div className="w-72">
+              <div className={`${sidebarVisible ? 'w-72' : 'w-0 overflow-hidden'}`}>
                 <ReportSidebar
                   sections={sections}
                   activeSection={activeSection}

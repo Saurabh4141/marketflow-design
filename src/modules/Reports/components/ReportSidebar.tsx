@@ -51,7 +51,7 @@ export const ReportSidebar: React.FC<ReportSidebarProps> = ({
   }, [onSectionClick, prefersReducedMotion]);
 
   return (
-    <aside className="lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+    <aside className="lg:sticky lg:top-[100px] lg:h-[calc(100vh-120px)] overflow-y-auto scrollbar-thin">
       {/* Section Navigation */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
