@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Download, ChevronRight } from 'lucide-react';
+import { Download, ChevronRight, PanelLeftClose } from 'lucide-react';
 import { ReportSection, SectionGroup, sectionGroups } from '@/data/reportSections';
 import { scrollToSection } from '@/hooks/useScrollSpy';
 import { cn } from '@/lib/utils';
@@ -9,6 +9,7 @@ interface ReportSidebarProps {
   activeSection: string;
   onDownloadPDF: () => void;
   onSectionClick?: (sectionKey: string) => void;
+  onToggle?: () => void;
 }
 
 export const ReportSidebar: React.FC<ReportSidebarProps> = ({
@@ -16,6 +17,7 @@ export const ReportSidebar: React.FC<ReportSidebarProps> = ({
   activeSection,
   onDownloadPDF,
   onSectionClick,
+  onToggle,
 }) => {
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' 
@@ -52,8 +54,17 @@ export const ReportSidebar: React.FC<ReportSidebarProps> = ({
     <aside className="lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
       {/* Section Navigation */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 bg-gray-50">
+        <div className="p-4 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-900">Report Contents</h3>
+          {onToggle && (
+            <button
+              onClick={onToggle}
+              className="p-1.5 rounded-md hover:bg-gray-200 transition-colors"
+              aria-label="Hide sidebar"
+            >
+              <PanelLeftClose className="w-4 h-4 text-gray-500" />
+            </button>
+          )}
         </div>
         
         <nav className="p-3">
