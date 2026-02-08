@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { companyInfo } from "@/data/companyInfo";
-import Logo from "@/assets/logo.png";
+import Logo from "@/assets/logo-clean.png";
 
 // X (Twitter) icon component
 const XIcon = ({ className }: { className?: string }) => (
