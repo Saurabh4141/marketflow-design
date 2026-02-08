@@ -3,15 +3,28 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaginationControls } from "@/components/ui/PaginationControls";
-import { 
-  Search, 
-  TrendingUp, 
-  Clock, 
-  ArrowRight 
+import {
+  Search,
+  TrendingUp,
+  Clock,
+  ArrowRight,
+  MapPin,
+  Star,
+  DollarSign,
+  BarChart3,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getIndustryDetailBySlug, getSubIndustryBySlug, getIndustryBySlug } from "@/data/industries";
-import { reportsData, getReportsByIndustry, getReportsBySubIndustry } from "@/data/reports";
+import {
+  getIndustryDetailBySlug,
+  getSubIndustryBySlug,
+  getIndustryBySlug,
+} from "@/data/industries";
+import {
+  reportsData,
+  getReportsByIndustry,
+  getReportsBySubIndustry,
+} from "@/data/reports";
 
 // Category color mapping
 const categoryColors: Record<string, string> = {
@@ -19,16 +32,16 @@ const categoryColors: Record<string, string> = {
   "Consumer Products": "bg-purple-100 text-purple-700",
   "Food, Beverage & Nutrition": "bg-orange-100 text-orange-700",
   "Chemicals & Materials": "bg-green-100 text-green-700",
-  "Technology": "bg-blue-100 text-blue-700",
+  Technology: "bg-blue-100 text-blue-700",
   "Industrial Automation": "bg-slate-100 text-slate-700",
   "Services & Utilities": "bg-amber-100 text-amber-700",
-  "Pharmaceutical": "bg-rose-100 text-rose-700",
+  Pharmaceutical: "bg-rose-100 text-rose-700",
   "Healthcare IT & Services": "bg-pink-100 text-pink-700",
   "Medical Devices & Consumables": "bg-red-100 text-red-700",
   "Medical Devices": "bg-rose-100 text-rose-700",
   "IT Security & Software": "bg-indigo-100 text-indigo-700",
   "Electronics & Semiconductors": "bg-violet-100 text-violet-700",
-  "Agriculture": "bg-lime-100 text-lime-700",
+  Agriculture: "bg-lime-100 text-lime-700",
   "Packaging & Transport": "bg-yellow-100 text-yellow-700",
   "Energy & Power": "bg-emerald-100 text-emerald-700",
   "Construction & Real Estate": "bg-stone-100 text-stone-700",
@@ -38,114 +51,138 @@ const categoryColors: Record<string, string> = {
 };
 
 // Single report card component
-const ReportCard = memo(({ report }: { 
-  report: {
-    title: string;
-    slug: string;
-    date: string;
-    growth: string;
-    pages: number;
-    price: string;
-    category: string;
-    industrySlug: string;
-    subIndustrySlug: string;
-    market_size: string;
-    forecast_size: string;
-    forecast_period: string;
-    regions_covered: string;
-    major_players: string;
-  }
-}) => {
-  // Build the full report URL path
-  const reportUrl = report.subIndustrySlug 
-    ? `/report/${report.industrySlug}/${report.subIndustrySlug}/${report.slug}`
-    : `/report/${report.slug}`;
-  
-  return (
-    <article className="p-5 md:p-6 rounded-xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-md transition-all">
-      {/* Category & Growth Badge */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        <Link 
-          to={`/industry/${report.industrySlug}`}
-          className={cn(
-            "px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity",
-            categoryColors[report.category] || "bg-gray-100 text-gray-700"
-          )}
-        >
-          {report.category}
-        </Link>
-        <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
-          <TrendingUp className="w-3 h-3" />
-          {report.growth}
-        </span>
-      </div>
+const ReportCard = memo(
+  ({
+    report,
+  }: {
+    report: {
+      title: string;
+      slug: string;
+      date: string;
+      growth: string;
+      pages: number;
+      price: string;
+      category: string;
+      industrySlug: string;
+      subIndustrySlug: string;
+      market_size: string;
+      forecast_size: string;
+      forecast_period: string;
+      regions_covered: string;
+      major_players: string;
+    };
+  }) => {
+    // Build the full report URL path
+    const reportUrl = report.subIndustrySlug
+      ? `/report/${report.industrySlug}/${report.subIndustrySlug}/${report.slug}`
+      : `/report/${report.slug}`;
 
-      {/* Title */}
-      <h2 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
-        <Link to={reportUrl} className="hover:underline">
-          {report.title}
-        </Link>
-      </h2>
+    return (
+      <article className="p-5 md:p-6 rounded-xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-md transition-all">
+        {/* Category & Growth Badge */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <Link
+            to={`/industry/${report.industrySlug}`}
+            className={cn(
+              "px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity",
+              categoryColors[report.category] || "bg-gray-100 text-gray-700",
+            )}
+          >
+            {report.category}
+          </Link>
+          <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
+            CAGR
+            <TrendingUp className="w-3 h-3" />
+            {report.growth}
+          </span>
+        </div>
 
-      {/* Market Data Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
-        <div className="bg-muted/50 rounded-lg px-3 py-2">
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">CAGR</div>
-          <div className="text-sm font-semibold text-emerald-600">{report.growth}</div>
-        </div>
-        <div className="bg-muted/50 rounded-lg px-3 py-2">
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Market Size</div>
-          <div className="text-sm font-semibold text-foreground">{report.market_size}</div>
-        </div>
-        <div className="bg-muted/50 rounded-lg px-3 py-2">
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Forecast Size</div>
-          <div className="text-sm font-semibold text-foreground">{report.forecast_size}</div>
-        </div>
-        <div className="bg-muted/50 rounded-lg px-3 py-2">
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Forecast Period</div>
-          <div className="text-sm font-semibold text-foreground">{report.forecast_period}</div>
-        </div>
-        <div className="bg-muted/50 rounded-lg px-3 py-2 col-span-2">
-          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Regions Covered</div>
-          <div className="text-sm font-medium text-foreground truncate">{report.regions_covered}</div>
-        </div>
-      </div>
-      
-      {/* Major Players */}
-      <div className="mb-4">
-        <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium mb-1">Major Players</div>
-        <div className="text-sm text-foreground">{report.major_players}</div>
-      </div>
+        {/* Title */}
+        <h2 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
+          <Link to={reportUrl} className="hover:underline">
+            {report.title}
+          </Link>
+        </h2>
 
-      {/* Meta Info */}
-      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
-        <span className="flex items-center gap-1.5">
-          <Clock className="w-4 h-4" />
-          {report.date}
-        </span>
-        <span>{report.pages} pages</span>
-        <span className="font-display font-bold text-foreground text-base">
-          {report.price}
-        </span>
-      </div>
+        <div className="mb-2 flex flex-wrap gap-2">
+          {/* Market Size */}
+          <span className="inline-flex items-center gap-1 rounded-full bg-muted/50 px-3 py-1 text-[12px] uppercase tracking-wide text-muted-foreground font-medium">
+            <DollarSign className="w-3.5 h-3.5" />
+            Market Size:
+            <span className="ml-1 text-foreground font-semibold">
+              {report.market_size}
+            </span>
+          </span>
 
-      {/* Action Buttons */}
-      <div className="flex flex-wrap gap-3">
-        <Link to={`/checkout/${report.slug}`}>
-          <Button variant="gradient" size="sm">
-            Buy Now
-            <ArrowRight className="w-4 h-4 ml-1" />
-          </Button>
-        </Link>
-        <Link to={reportUrl}>
-          <Button variant="outline" size="sm">
-            Read More
-          </Button>
-        </Link>
-      </div>
-    </article>
-  );
-});
+          {/* Forecast Size */}
+          <span className="inline-flex items-center gap-1 rounded-full bg-muted/50 px-3 py-1 text-[12px] uppercase tracking-wide text-muted-foreground font-medium">
+            <BarChart3 className="w-3.5 h-3.5" />
+            Forecast Size:
+            <span className="ml-1 text-foreground font-semibold">
+              {report.forecast_size}
+            </span>
+          </span>
+
+          {/* Forecast Period */}
+          <span className="inline-flex items-center gap-1 rounded-full bg-muted/50 px-3 py-1 text-[12px] uppercase tracking-wide text-muted-foreground font-medium">
+            <Calendar className="w-3.5 h-3.5" />
+            Forecast:
+            <span className="ml-1 text-foreground font-semibold">
+              {report.forecast_period}
+            </span>
+          </span>
+        </div>
+
+        <div className="mb-1 flex items-center gap-2 text-xs leading-5 text-[12px] font-normal">
+          <MapPin className="w-4 h-4 text-muted-foreground" />
+          <span className="uppercase tracking-wide text-muted-foreground">
+            Regions Covered:
+          </span>
+          <span className="font-semibold text-foreground text-[12px]">
+            {report.regions_covered}
+          </span>
+        </div>
+
+        <div className="mb-1 flex items-center gap-2 text-xs leading-5 text-[12px] font-normal">
+          <Star className="w-4 h-4 text-muted-foreground" />
+          <span className="uppercase tracking-wide text-muted-foreground">
+            Major Players
+          </span>
+          <span className="font-semibold text-foreground text-[12px]">
+            {report.major_players}
+          </span>
+        </div>
+
+        {/* Meta Info */}
+        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
+          <span className="flex items-center gap-1.5">
+            <Clock className="w-4 h-4" />
+            {report.date}
+          </span>
+          <span>{report.pages} pages</span>
+          <span className="font-display font-bold text-foreground text-base">
+            {report.price}
+          </span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-3">
+          <Link to={`/checkout/${report.slug}`}>
+            <Button variant="gradient" size="sm">
+              Buy Now
+              <ArrowRight className="w-4 h-4 ml-1" />
+            </Button>
+          </Link>
+          <Link to={reportUrl}>
+            <Button variant="outline" size="sm">
+              Read More
+            </Button>
+          </Link>
+        </div>
+      </article>
+    );
+  },
+);
 
 ReportCard.displayName = "ReportCard";
 
@@ -161,23 +198,25 @@ const IndustryReportsList = memo(() => {
   const industryResult = slug ? getIndustryBySlug(slug) : null;
 
   // Get all reports with category info
-  const allReports = useMemo(() => 
-    reportsData.map(r => ({
-      title: r.title,
-      slug: r.slug,
-      date: r.date,
-      growth: r.growth,
-      pages: r.pages,
-      price: r.price,
-      category: r.sub_industry || r.industry,
-      industrySlug: r.industry,
-      subIndustrySlug: r.sub_industry,
-      market_size: r.market_size,
-      forecast_size: r.forecast_size,
-      forecast_period: r.forecast_period,
-      regions_covered: r.regions_covered,
-      major_players: r.major_players
-    })), []
+  const allReports = useMemo(
+    () =>
+      reportsData.map((r) => ({
+        title: r.title,
+        slug: r.slug,
+        date: r.date,
+        growth: r.growth,
+        pages: r.pages,
+        price: r.price,
+        category: r.sub_industry || r.industry,
+        industrySlug: r.industry,
+        subIndustrySlug: r.sub_industry,
+        market_size: r.market_size,
+        forecast_size: r.forecast_size,
+        forecast_period: r.forecast_period,
+        regions_covered: r.regions_covered,
+        major_players: r.major_players,
+      })),
+    [],
   );
 
   // Determine which reports to show based on slug
@@ -186,7 +225,7 @@ const IndustryReportsList = memo(() => {
       // Check if it's a sub-industry
       if (subIndustryResult) {
         const subReports = getReportsBySubIndustry(slug);
-        return subReports.map(r => ({
+        return subReports.map((r) => ({
           title: r.title,
           slug: r.slug,
           date: r.date,
@@ -200,13 +239,13 @@ const IndustryReportsList = memo(() => {
           forecast_size: r.forecast_size,
           forecast_period: r.forecast_period,
           regions_covered: r.regions_covered,
-          major_players: r.major_players
+          major_players: r.major_players,
         }));
       }
       // Check if it's a main industry
       if (industryResult) {
         const indReports = getReportsByIndustry(slug);
-        return indReports.map(r => ({
+        return indReports.map((r) => ({
           title: r.title,
           slug: r.slug,
           date: r.date,
@@ -220,7 +259,7 @@ const IndustryReportsList = memo(() => {
           forecast_size: r.forecast_size,
           forecast_period: r.forecast_period,
           regions_covered: r.regions_covered,
-          major_players: r.major_players
+          major_players: r.major_players,
         }));
       }
     }
@@ -231,7 +270,7 @@ const IndustryReportsList = memo(() => {
   const filteredReports = useMemo(() => {
     if (!searchQuery.trim()) return baseReports;
     return baseReports.filter((report) =>
-      report.title.toLowerCase().includes(searchQuery.toLowerCase())
+      report.title.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [baseReports, searchQuery]);
 
@@ -264,15 +303,27 @@ const IndustryReportsList = memo(() => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-               {slug && detail ? `${detail.title} Reports` : slug && subIndustryResult ? `${subIndustryResult.name} Reports` : "All Market Reports"}
+              {slug && detail
+                ? `${detail.title} Reports`
+                : slug && subIndustryResult
+                  ? `${subIndustryResult.name} Reports`
+                  : "All Market Reports"}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Showing <span className="font-medium text-foreground">{paginatedReports.length}</span> of{" "}
-              <span className="font-medium text-foreground">{totalItems}</span> reports
+              Showing{" "}
+              <span className="font-medium text-foreground">
+                {paginatedReports.length}
+              </span>{" "}
+              of{" "}
+              <span className="font-medium text-foreground">{totalItems}</span>{" "}
+              reports
             </p>
           </div>
           {slug && (
-            <Link to="/industry" className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all text-sm">
+            <Link
+              to="/industry"
+              className="text-primary font-medium flex items-center gap-2 hover:gap-3 transition-all text-sm"
+            >
               View All <ArrowRight className="w-4 h-4" />
             </Link>
           )}
@@ -306,11 +357,10 @@ const IndustryReportsList = memo(() => {
       {/* Empty State */}
       {paginatedReports.length === 0 && (
         <div className="text-center py-16">
-          <p className="text-muted-foreground text-lg mb-4">No reports found matching your search.</p>
-          <Button 
-            variant="outline" 
-            onClick={() => setSearchQuery("")}
-          >
+          <p className="text-muted-foreground text-lg mb-4">
+            No reports found matching your search.
+          </p>
+          <Button variant="outline" onClick={() => setSearchQuery("")}>
             Clear Search
           </Button>
         </div>

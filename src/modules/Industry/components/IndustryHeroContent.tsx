@@ -14,7 +14,7 @@ interface IndustryHeroContentProps {
 
 // Stats section for specific industry
 const IndustryStats = memo(({ detail }: { detail: IndustryDetail }) => (
-  <section className="py-12 relative z-10">
+  <section className="py-6 relative z-10">
     <div className="container mx-auto px-4">
       <div className="grid md:grid-cols-3 gap-6">
         <div className="p-6 rounded-2xl bg-card border border-border shadow-lg text-center">
@@ -41,7 +41,7 @@ IndustryStats.displayName = "IndustryStats";
 
 // Top players section
 const TopPlayers = memo(({ players }: { players: string[] }) => (
-  <section className="py-12 bg-secondary/30">
+  <section className="py-6 bg-secondary/30">
     <div className="container mx-auto px-4">
       <AnimatedSection>
         <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">

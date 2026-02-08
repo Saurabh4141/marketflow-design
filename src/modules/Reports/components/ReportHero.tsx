@@ -33,7 +33,7 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
   ];
 
   return (
-    <section className="relative bg-gradient-to-br from-[#0f2744] via-[#1e3a5f] to-[#2a4a6f] pt-24 sm:pt-28 lg:pt-32 pb-8 sm:pb-12 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#0f2744] via-[#1e3a5f] to-[#2a4a6f] pt-12 sm:pt-14 lg:pt-8 pb-8 sm:pb-12 overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{

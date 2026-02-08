@@ -10,7 +10,7 @@ interface PageHeroProps {
 
 export const PageHero = ({ title, subtitle, badge, children }: PageHeroProps) => {
   return (
-    <section className="relative py-20 md:py-28 bg-gradient-to-br from-primary via-primary to-accent overflow-hidden">
+    <section className="relative py-20 md:py-20 bg-gradient-to-br from-primary via-primary to-accent overflow-hidden">
       {/* Grid Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-10" />
       

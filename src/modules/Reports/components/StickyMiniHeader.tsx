@@ -21,7 +21,7 @@ export const StickyMiniHeader: React.FC<StickyMiniHeaderProps> = ({
   return (
     <div
       className={cn(
-        'fixed top-[72px] left-0 right-0 z-40 transition-all duration-300 ease-in-out',
+        'fixed top-[80px] left-0 right-0 z-40 transition-all duration-300 ease-in-out',
         isVisible
           ? 'translate-y-0 opacity-100'
           : '-translate-y-full opacity-0 pointer-events-none'
