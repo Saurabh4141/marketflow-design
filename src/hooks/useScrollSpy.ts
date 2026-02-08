@@ -9,43 +9,47 @@ export const useScrollSpy = (
   sectionIds: string[],
   options: UseScrollSpyOptions = {}
 ) => {
-  const { offset = 120, throttleMs = 50 } = options;
+  const { offset = 120, throttleMs = 100 } = options;
   const [activeSection, setActiveSection] = useState<string>('');
+  
+  // Refs for stable state management
   const isScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const activeSectionRef = useRef<string>('');
+  const lastActiveSectionRef = useRef<string>('');
+  const lastScrollYRef = useRef<number>(0);
 
-  // Keep ref in sync with state
-  useEffect(() => {
-    activeSectionRef.current = activeSection;
-  }, [activeSection]);
-
-  // Check if reduced motion is preferred - memoized to avoid dependency issues
+  // Check if reduced motion is preferred
   const prefersReducedMotion = useMemo(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
-  // Deterministic scroll position logic - find the last section that has scrolled past the offset
-  const calculateActiveSection = useCallback(() => {
+  // Deterministic active section calculation with hysteresis
+  const calculateActiveSection = useCallback((): string => {
     if (sectionIds.length === 0) return '';
 
     const scrollY = window.scrollY;
-    const buffer = 20; // Small buffer to prevent edge flickering
-    const threshold = scrollY + offset + buffer;
+    const scrollDirection = scrollY > lastScrollYRef.current ? 'down' : 'up';
+    lastScrollYRef.current = scrollY;
 
-    let activeId = sectionIds[0]; // Default to first section
+    // Hysteresis buffer - larger when scrolling up to prevent flickering
+    const hysteresis = scrollDirection === 'up' ? 50 : 20;
+    const threshold = scrollY + offset + hysteresis;
+
+    let activeId = sectionIds[0];
 
     // Find the last section whose top has crossed the threshold
-    for (const sectionId of sectionIds) {
+    for (let i = 0; i < sectionIds.length; i++) {
+      const sectionId = sectionIds[i];
       const element = document.getElementById(sectionId);
+      
       if (element) {
         const elementTop = element.offsetTop;
+        
         if (elementTop <= threshold) {
           activeId = sectionId;
         } else {
-          // Once we find a section that hasn't crossed, stop
+          // Stop at first section that hasn't crossed threshold
           break;
         }
       }
@@ -54,52 +58,47 @@ export const useScrollSpy = (
     return activeId;
   }, [sectionIds, offset]);
 
-  // Throttled scroll handler - stable effect that doesn't depend on activeSection
+  // Throttled scroll handler
   useEffect(() => {
     if (sectionIds.length === 0) return;
 
+    let lastCallTime = 0;
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      // Skip if we're in a click-triggered scroll
+      // Skip if manually scrolling via click
       if (isScrollingRef.current) return;
 
-      // Cancel any pending RAF
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      const now = Date.now();
+      if (now - lastCallTime < throttleMs) return;
+      lastCallTime = now;
 
-      // Use RAF for smooth updates
-      rafRef.current = requestAnimationFrame(() => {
+      // Cancel pending RAF
+      if (rafId) cancelAnimationFrame(rafId);
+
+      rafId = requestAnimationFrame(() => {
         const newActiveSection = calculateActiveSection();
-        // Use ref to compare to avoid stale closure
-        if (newActiveSection && newActiveSection !== activeSectionRef.current) {
+        
+        // Only update if actually different
+        if (newActiveSection && newActiveSection !== lastActiveSectionRef.current) {
+          lastActiveSectionRef.current = newActiveSection;
           setActiveSection(newActiveSection);
         }
       });
     };
 
-    // Throttle scroll events
-    let lastCall = 0;
-    const throttledScroll = () => {
-      const now = Date.now();
-      if (now - lastCall >= throttleMs) {
-        lastCall = now;
-        handleScroll();
-      }
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    
     // Set initial active section
     const initialActive = calculateActiveSection();
     if (initialActive) {
+      lastActiveSectionRef.current = initialActive;
       setActiveSection(initialActive);
     }
 
     return () => {
-      window.removeEventListener('scroll', throttledScroll);
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [sectionIds, calculateActiveSection, throttleMs]);
 
@@ -107,35 +106,36 @@ export const useScrollSpy = (
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash && sectionIds.includes(hash)) {
-      // Set active immediately
+      lastActiveSectionRef.current = hash;
       setActiveSection(hash);
-      // Then scroll after a brief delay
+      
       setTimeout(() => {
         scrollToSection(hash, offset, prefersReducedMotion);
       }, 100);
     }
   }, [sectionIds, offset, prefersReducedMotion]);
 
-  // Manual set with scroll suspension
+  // Manual section selection with scroll suspension
   const setActiveSectionManual = useCallback((sectionId: string) => {
-    // Immediately update active state
+    // Immediately update state
+    lastActiveSectionRef.current = sectionId;
     setActiveSection(sectionId);
-    
+
     // Suspend scroll observer
     isScrollingRef.current = true;
-    
-    // Clear any existing timeout
+
+    // Clear existing timeout
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
-    
-    // Resume observer after scroll settles
+
+    // Resume observer after scroll animation completes
     scrollTimeoutRef.current = setTimeout(() => {
       isScrollingRef.current = false;
-    }, 400);
+    }, 500);
   }, []);
 
-  // Cleanup timeout on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (scrollTimeoutRef.current) {
@@ -149,7 +149,7 @@ export const useScrollSpy = (
 
 // Utility function to scroll to section
 export const scrollToSection = (
-  sectionId: string, 
+  sectionId: string,
   offset: number = 120,
   prefersReducedMotion: boolean = false
 ) => {
