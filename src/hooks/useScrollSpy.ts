@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 interface UseScrollSpyOptions {
   offset?: number;
@@ -14,11 +14,18 @@ export const useScrollSpy = (
   const isScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const rafRef = useRef<number | null>(null);
+  const activeSectionRef = useRef<string>('');
 
-  // Check if reduced motion is preferred
-  const prefersReducedMotion = typeof window !== 'undefined' 
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-    : false;
+  // Keep ref in sync with state
+  useEffect(() => {
+    activeSectionRef.current = activeSection;
+  }, [activeSection]);
+
+  // Check if reduced motion is preferred - memoized to avoid dependency issues
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
 
   // Deterministic scroll position logic - find the last section that has scrolled past the offset
   const calculateActiveSection = useCallback(() => {
@@ -47,7 +54,7 @@ export const useScrollSpy = (
     return activeId;
   }, [sectionIds, offset]);
 
-  // Throttled scroll handler
+  // Throttled scroll handler - stable effect that doesn't depend on activeSection
   useEffect(() => {
     if (sectionIds.length === 0) return;
 
@@ -63,7 +70,8 @@ export const useScrollSpy = (
       // Use RAF for smooth updates
       rafRef.current = requestAnimationFrame(() => {
         const newActiveSection = calculateActiveSection();
-        if (newActiveSection && newActiveSection !== activeSection) {
+        // Use ref to compare to avoid stale closure
+        if (newActiveSection && newActiveSection !== activeSectionRef.current) {
           setActiveSection(newActiveSection);
         }
       });
@@ -93,7 +101,7 @@ export const useScrollSpy = (
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [sectionIds, calculateActiveSection, throttleMs, activeSection]);
+  }, [sectionIds, calculateActiveSection, throttleMs]);
 
   // Handle hash on initial load
   useEffect(() => {
