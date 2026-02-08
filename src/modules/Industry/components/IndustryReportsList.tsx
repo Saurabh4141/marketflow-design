@@ -54,69 +54,77 @@ const ReportCard = memo(({ report }: {
     price: string;
     category: string;
     industrySlug: string;
+    subIndustrySlug: string;
   }
-}) => (
-  <article className="p-5 md:p-6 rounded-xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-md transition-all">
-    {/* Category & Growth Badge */}
-    <div className="flex flex-wrap items-center gap-2 mb-3">
-      <Link 
-        to={`/industry/${report.industrySlug}`}
-        className={cn(
-          "px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity",
-          categoryColors[report.category] || "bg-gray-100 text-gray-700"
-        )}
-      >
-        {report.category}
-      </Link>
-      <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
-        <TrendingUp className="w-3 h-3" />
-        {report.growth}
-      </span>
-    </div>
+}) => {
+  // Build the full report URL path
+  const reportUrl = report.subIndustrySlug 
+    ? `/report/${report.industrySlug}/${report.subIndustrySlug}/${report.slug}`
+    : `/report/${report.slug}`;
+  
+  return (
+    <article className="p-5 md:p-6 rounded-xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-md transition-all">
+      {/* Category & Growth Badge */}
+      <div className="flex flex-wrap items-center gap-2 mb-3">
+        <Link 
+          to={`/industry/${report.industrySlug}`}
+          className={cn(
+            "px-3 py-1 rounded-full text-xs font-medium hover:opacity-80 transition-opacity",
+            categoryColors[report.category] || "bg-gray-100 text-gray-700"
+          )}
+        >
+          {report.category}
+        </Link>
+        <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium bg-emerald-50 px-2 py-1 rounded-full">
+          <TrendingUp className="w-3 h-3" />
+          {report.growth}
+        </span>
+      </div>
 
-    {/* Title */}
-    <h2 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
-      <Link to={`/report/${report.slug}`} className="hover:underline">
-        {report.title}
-      </Link>
-    </h2>
+      {/* Title */}
+      <h2 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2 hover:text-primary transition-colors">
+        <Link to={reportUrl} className="hover:underline">
+          {report.title}
+        </Link>
+      </h2>
 
-    {/* Description */}
-    <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-      {truncateText(`Comprehensive market analysis covering trends, competitive landscape, growth drivers, and future outlook for the ${report.title.toLowerCase()} sector.`, 140)}
-      <Link to={`/report/${report.slug}`} className="text-primary font-medium ml-1 hover:underline">
-        Read more
-      </Link>
-    </p>
+      {/* Description */}
+      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+        {truncateText(`Comprehensive market analysis covering trends, competitive landscape, growth drivers, and future outlook for the ${report.title.toLowerCase()} sector.`, 140)}
+        <Link to={reportUrl} className="text-primary font-medium ml-1 hover:underline">
+          Read more
+        </Link>
+      </p>
 
-    {/* Meta Info */}
-    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
-      <span className="flex items-center gap-1.5">
-        <Clock className="w-4 h-4" />
-        {report.date}
-      </span>
-      <span>{report.pages} pages</span>
-      <span className="font-display font-bold text-foreground text-base">
-        {report.price}
-      </span>
-    </div>
+      {/* Meta Info */}
+      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
+        <span className="flex items-center gap-1.5">
+          <Clock className="w-4 h-4" />
+          {report.date}
+        </span>
+        <span>{report.pages} pages</span>
+        <span className="font-display font-bold text-foreground text-base">
+          {report.price}
+        </span>
+      </div>
 
-    {/* Action Buttons */}
-    <div className="flex flex-wrap gap-3">
-      <Link to={`/checkout/${report.slug}`}>
-        <Button variant="gradient" size="sm">
-          Buy Now
-          <ArrowRight className="w-4 h-4 ml-1" />
-        </Button>
-      </Link>
-      <Link to={`/report/${report.slug}`}>
-        <Button variant="outline" size="sm">
-          Read More
-        </Button>
-      </Link>
-    </div>
-  </article>
-));
+      {/* Action Buttons */}
+      <div className="flex flex-wrap gap-3">
+        <Link to={`/checkout/${report.slug}`}>
+          <Button variant="gradient" size="sm">
+            Buy Now
+            <ArrowRight className="w-4 h-4 ml-1" />
+          </Button>
+        </Link>
+        <Link to={reportUrl}>
+          <Button variant="outline" size="sm">
+            Read More
+          </Button>
+        </Link>
+      </div>
+    </article>
+  );
+});
 
 ReportCard.displayName = "ReportCard";
 
