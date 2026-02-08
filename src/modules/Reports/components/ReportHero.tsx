@@ -140,7 +140,7 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
           </div>
 
           {/* Right: Report Preview Card */}
-          <div className="w-full sm:w-80 lg:w-72 flex-shrink-0">
+          <div className="hidden lg:block w-72 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-2xl p-4 border border-gray-100">
               <div className="bg-gradient-to-br from-sky-50 via-sky-100/50 to-white rounded-xl p-6 flex flex-col items-center justify-center min-h-[200px] border border-sky-100">
                 <div className="w-16 h-16 bg-[#1e3a5f] rounded-xl flex items-center justify-center mb-4">
