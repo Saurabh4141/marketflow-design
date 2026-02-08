@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { PanelLeftClose, PanelLeft } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import {
   ReportHero,
@@ -18,17 +19,29 @@ import { reportsData } from '@/data/reports';
 import { generateReportSections, getVisibleSections } from '@/data/reportSections';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 
-const ReportDetail: React.FC = () => {
-  const { slug, industry, subIndustry, reportSlug } = useParams<{
-    slug?: string;
-    industry?: string;
-    subIndustry?: string;
-    reportSlug?: string;
-  }>();
+const SIDEBAR_STORAGE_KEY = 'report_sidebar_visible';
+
+const ReportDetail = () => {
+  const { slug, industry, subIndustry, reportSlug } = useParams();
   const navigate = useNavigate();
   
   const [showMiniHeader, setShowMiniHeader] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef(null);
+
+  // Sidebar visibility state with localStorage persistence
+  const [sidebarVisible, setSidebarVisible] = useState(() => {
+    const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+    return stored === null ? true : stored === 'true';
+  });
+
+  // Toggle sidebar and persist to localStorage
+  const toggleSidebar = () => {
+    setSidebarVisible(prev => {
+      const newValue = !prev;
+      localStorage.setItem(SIDEBAR_STORAGE_KEY, String(newValue));
+      return newValue;
+    });
+  };
 
   // Get report data based on route params
   const report = useMemo(() => {
@@ -163,14 +176,36 @@ const ReportDetail: React.FC = () => {
       <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
+            {/* Sidebar Toggle Button - Desktop */}
+            <div className="hidden lg:flex items-start">
+              <button
+                onClick={toggleSidebar}
+                className="p-2 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                aria-label={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
+                aria-expanded={sidebarVisible}
+              >
+                {sidebarVisible ? (
+                  <PanelLeftClose className="w-5 h-5 text-gray-600" />
+                ) : (
+                  <PanelLeft className="w-5 h-5 text-gray-600" />
+                )}
+              </button>
+            </div>
+
             {/* Left Sidebar - Desktop Only */}
-            <div className="hidden lg:block w-72 flex-shrink-0">
-              <ReportSidebar
-                sections={sections}
-                activeSection={activeSection}
-                onDownloadPDF={handleDownloadSample}
-                onSectionClick={setActiveSectionManual}
-              />
+            <div
+              className={`hidden lg:block flex-shrink-0 transition-all duration-300 ease-in-out overflow-hidden ${
+                sidebarVisible ? 'w-72 opacity-100' : 'w-0 opacity-0'
+              }`}
+            >
+              <div className="w-72">
+                <ReportSidebar
+                  sections={sections}
+                  activeSection={activeSection}
+                  onDownloadPDF={handleDownloadSample}
+                  onSectionClick={setActiveSectionManual}
+                />
+              </div>
             </div>
 
             {/* Main Content */}
