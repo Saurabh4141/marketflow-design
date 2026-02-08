@@ -299,7 +299,7 @@ const IndustryReportsList = memo(() => {
   return (
     <main className="flex-1 min-w-0">
       {/* Reports Header with Search */}
-      <div className="mb-6">
+      <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
             <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground">
@@ -328,17 +328,19 @@ const IndustryReportsList = memo(() => {
             </Link>
           )}
         </div>
-
+      </div>
+     <div className="mb-6 sticky top-[3.5rem] lg:top-[5rem] z-10 bg-background/95 backdrop-blur-sm py-2">
         {/* Report Search - Sticky */}
-        <div className="sticky top-20 z-10 bg-background/95 backdrop-blur-sm py-2 -mx-1 px-1">
-          <div className="relative max-w-md">
+        <div className="-mx-1 px-1">
+          <div className="relative border-2 border-[#0c7497]/40 rounded-lg focus-within:border-[#0c7497]/70 transition-colors">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               type="search"
+              aria-label="Search reports"
               placeholder="Search reports..."
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="pl-9 h-11"
+              className="pl-9 h-11 border-0 focus-visible:ring-0"
             />
           </div>
         </div>

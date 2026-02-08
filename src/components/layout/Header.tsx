@@ -13,7 +13,7 @@ import Logo from "@/assets/logo-clean.png";
 const navItems = [
   { label: "Home", href: "/", activeMatch: "exact" as const },
   {
-    label: "Report Store",
+    label: "Reports",
     href: "/industry",
     hasMegaMenu: true,
     menuType: "industries" as const,
