@@ -8,7 +8,7 @@ import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { companyInfo } from "@/data/companyInfo";
 import { industries } from "@/data/industries";
 import { services } from "@/data/services";
-import Logo from "@/assets/logo.png";
+import Logo from "@/assets/logo-clean.png";
 
 const navItems = [
   { label: "Home", href: "/", activeMatch: "exact" as const },
