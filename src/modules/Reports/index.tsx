@@ -93,8 +93,8 @@ const ReportDetail: React.FC = () => {
   const visibleSections = useMemo(() => getVisibleSections(sections), [sections]);
   const sectionIds = useMemo(() => visibleSections.map(s => s.section_key), [visibleSections]);
 
-  // Scroll spy for sidebar highlighting
-  const activeSection = useScrollSpy(sectionIds, { offset: 160 });
+  // Scroll spy for sidebar highlighting with manual override support
+  const { activeSection, setActiveSectionManual } = useScrollSpy(sectionIds, { offset: 160 });
 
   // Handle sticky mini header visibility
   useEffect(() => {
@@ -169,6 +169,7 @@ const ReportDetail: React.FC = () => {
                 sections={sections}
                 activeSection={activeSection}
                 onDownloadPDF={handleDownloadSample}
+                onSectionClick={setActiveSectionManual}
               />
             </div>
 
