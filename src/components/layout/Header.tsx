@@ -137,14 +137,12 @@ export const Header = () => {
           <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-md group-hover:shadow-glow transition-shadow">
-                <span className="">
-                   <img
-                      src={Logo}
-                      alt="Market Research Visualization"
-                      className="w-full h-full object-cover"
-                    />
-                </span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl overflow-hidden flex items-center justify-center">
+                <img
+                  src={Logo}
+                  alt="Core Market Research"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="hidden xs:block sm:block">
                 <span className="font-display font-bold text-base sm:text-lg md:text-xl text-foreground">

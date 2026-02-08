@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { companyInfo } from "@/data/companyInfo";
+import Logo from "@/assets/logo.png";
 
 // X (Twitter) icon component
 const XIcon = ({ className }: { className?: string }) => (
@@ -99,8 +100,12 @@ export const Footer = () => {
           {/* Brand Column */}
           <div className="col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
-                <span className="text-foreground font-display font-bold text-xl">C</span>
+              <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center">
+                <img
+                  src={Logo}
+                  alt="Core Market Research"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <span className="font-display font-bold text-xl">Core</span>
