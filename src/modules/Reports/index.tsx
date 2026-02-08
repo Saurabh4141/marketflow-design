@@ -97,12 +97,12 @@ const ReportDetail = () => {
     return reportDetailsData[0];
   }, [slug, industry, subIndustry, reportSlug]);
 
-  // Generate sections for this report
+  // Generate sections for this report - always returns array
   const sections = useMemo(() => {
     return generateReportSections(report.id);
   }, [report.id]);
 
-  // Get visible sections for scroll spy
+  // Get visible sections for scroll spy - always returns array
   const visibleSections = useMemo(() => getVisibleSections(sections), [sections]);
   const sectionIds = useMemo(() => visibleSections.map(s => s.section_key), [visibleSections]);
 
@@ -138,17 +138,9 @@ const ReportDetail = () => {
     navigate('/contact', { state: { reportTitle: report.title } });
   };
 
+  // Report always exists due to fallback, but keep guard for TypeScript
   if (!report) {
-    return (
-      <PageLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Report Not Found</h1>
-            <p className="text-gray-500">The requested report could not be found.</p>
-          </div>
-        </div>
-      </PageLayout>
-    );
+    return null;
   }
 
   return (
