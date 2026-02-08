@@ -37,12 +37,6 @@ const categoryColors: Record<string, string> = {
   "Financial Services": "bg-emerald-100 text-emerald-700",
 };
 
-// Helper function
-const truncateText = (text: string, maxLength: number = 120) => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength).trim() + "...";
-};
-
 // Single report card component
 const ReportCard = memo(({ report }: { 
   report: {
@@ -55,6 +49,11 @@ const ReportCard = memo(({ report }: {
     category: string;
     industrySlug: string;
     subIndustrySlug: string;
+    market_size: string;
+    forecast_size: string;
+    forecast_period: string;
+    regions_covered: string;
+    major_players: string;
   }
 }) => {
   // Build the full report URL path
@@ -88,13 +87,35 @@ const ReportCard = memo(({ report }: {
         </Link>
       </h2>
 
-      {/* Description */}
-      <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-        {truncateText(`Comprehensive market analysis covering trends, competitive landscape, growth drivers, and future outlook for the ${report.title.toLowerCase()} sector.`, 140)}
-        <Link to={reportUrl} className="text-primary font-medium ml-1 hover:underline">
-          Read more
-        </Link>
-      </p>
+      {/* Market Data Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+        <div className="bg-muted/50 rounded-lg px-3 py-2">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">CAGR</div>
+          <div className="text-sm font-semibold text-emerald-600">{report.growth}</div>
+        </div>
+        <div className="bg-muted/50 rounded-lg px-3 py-2">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Market Size</div>
+          <div className="text-sm font-semibold text-foreground">{report.market_size}</div>
+        </div>
+        <div className="bg-muted/50 rounded-lg px-3 py-2">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Forecast Size</div>
+          <div className="text-sm font-semibold text-foreground">{report.forecast_size}</div>
+        </div>
+        <div className="bg-muted/50 rounded-lg px-3 py-2">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Forecast Period</div>
+          <div className="text-sm font-semibold text-foreground">{report.forecast_period}</div>
+        </div>
+        <div className="bg-muted/50 rounded-lg px-3 py-2 col-span-2">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium">Regions Covered</div>
+          <div className="text-sm font-medium text-foreground truncate">{report.regions_covered}</div>
+        </div>
+      </div>
+      
+      {/* Major Players */}
+      <div className="mb-4">
+        <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-medium mb-1">Major Players</div>
+        <div className="text-sm text-foreground">{report.major_players}</div>
+      </div>
 
       {/* Meta Info */}
       <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
@@ -150,7 +171,12 @@ const IndustryReportsList = memo(() => {
       price: r.price,
       category: r.sub_industry || r.industry,
       industrySlug: r.industry,
-      subIndustrySlug: r.sub_industry
+      subIndustrySlug: r.sub_industry,
+      market_size: r.market_size,
+      forecast_size: r.forecast_size,
+      forecast_period: r.forecast_period,
+      regions_covered: r.regions_covered,
+      major_players: r.major_players
     })), []
   );
 
@@ -169,7 +195,12 @@ const IndustryReportsList = memo(() => {
           price: r.price,
           category: subIndustryResult.name,
           industrySlug: r.industry,
-          subIndustrySlug: r.sub_industry
+          subIndustrySlug: r.sub_industry,
+          market_size: r.market_size,
+          forecast_size: r.forecast_size,
+          forecast_period: r.forecast_period,
+          regions_covered: r.regions_covered,
+          major_players: r.major_players
         }));
       }
       // Check if it's a main industry
@@ -184,7 +215,12 @@ const IndustryReportsList = memo(() => {
           price: r.price,
           category: detail?.title || industryResult.name,
           industrySlug: r.industry,
-          subIndustrySlug: r.sub_industry
+          subIndustrySlug: r.sub_industry,
+          market_size: r.market_size,
+          forecast_size: r.forecast_size,
+          forecast_period: r.forecast_period,
+          regions_covered: r.regions_covered,
+          major_players: r.major_players
         }));
       }
     }
