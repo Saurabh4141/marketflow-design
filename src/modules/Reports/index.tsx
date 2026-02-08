@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PanelLeftClose, PanelLeft } from 'lucide-react';
+import { PanelLeft } from 'lucide-react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import {
   ReportHero,
@@ -176,21 +176,19 @@ const ReportDetail = () => {
       <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar Toggle Button - Desktop */}
-            <div className="hidden lg:flex items-start">
-              <button
-                onClick={toggleSidebar}
-                className="p-2 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
-                aria-label={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
-                aria-expanded={sidebarVisible}
-              >
-                {sidebarVisible ? (
-                  <PanelLeftClose className="w-5 h-5 text-gray-600" />
-                ) : (
+            {/* Expand Button - Shows when sidebar is hidden */}
+            {!sidebarVisible && (
+              <div className="hidden lg:flex items-start">
+                <button
+                  onClick={toggleSidebar}
+                  className="p-2 rounded-lg bg-white border border-gray-200 shadow-sm hover:bg-gray-50 transition-colors"
+                  aria-label="Show sidebar"
+                  aria-expanded={false}
+                >
                   <PanelLeft className="w-5 h-5 text-gray-600" />
-                )}
-              </button>
-            </div>
+                </button>
+              </div>
+            )}
 
             {/* Left Sidebar - Desktop Only */}
             <div
@@ -204,6 +202,7 @@ const ReportDetail = () => {
                   activeSection={activeSection}
                   onDownloadPDF={handleDownloadSample}
                   onSectionClick={setActiveSectionManual}
+                  onToggle={toggleSidebar}
                 />
               </div>
             </div>
