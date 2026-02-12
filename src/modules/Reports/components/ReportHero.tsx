@@ -75,7 +75,7 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
           <div className="flex-1 max-w-3xl">
             {/* SEO-optimized H1 */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-              {report.seo_title || `${report.title} | Market Size, Share & Growth Report ${report.forecast_year_from}-${report.forecast_year_to}`}
+              {report.seo_title || `${report.title} | Market Size, Share & Growth Report ${report.base_year}-${report.forecast_year}`}
             </h1>
             
             {/* Report Summary */}
@@ -87,16 +87,16 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
             <div className="flex flex-wrap gap-2 mb-6">
               <InfoBadge icon={Calendar} text={`Base Year: ${report.base_year}`} />
               <InfoBadge icon={Globe} text={report.regions_covered.length + ' Regions'} />
-              <InfoBadge icon={Grid3X3} text={`Forecast ${report.forecast_year_from}–${report.forecast_year_to}`} />
+              <InfoBadge icon={Grid3X3} text={`Forecast ${report.base_year}–${report.forecast_year}`} />
               <InfoBadge icon={FileText} text={`${report.pages} Pages`} />
             </div>
 
             {/* Market Stats */}
             <div className="flex flex-wrap gap-4 sm:gap-6 mb-8">
               <div className="bg-white/10 backdrop-blur rounded-xl px-4 py-3 border border-white/10">
-                <div className="text-xs text-white/60 mb-1">Market Size ({report.market_size_year})</div>
+                <div className="text-xs text-white/60 mb-1">Market Size ({report.base_year})</div>
                 <div className="text-xl sm:text-2xl font-bold text-white">
-                  ${report.market_size_value} {report.market_size_unit}
+                  ${report.base_year_value}
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl px-4 py-3 border border-white/10">
@@ -106,9 +106,9 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl px-4 py-3 border border-white/10">
-                <div className="text-xs text-white/60 mb-1">Forecast Value</div>
+                <div className="text-xs text-white/60 mb-1">Forecast Value ({report.forecast_year})</div>
                 <div className="text-xl sm:text-2xl font-bold text-white">
-                  ${report.forecast_value} {report.forecast_unit}
+                  ${report.forecast_year_value}
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export const ReportHero: React.FC<ReportHeroProps> = ({
                     Market Research Report
                   </div>
                   <div className="text-xs text-gray-400 mt-1">
-                    {report.forecast_year_from} Edition
+                    {report.base_year} Edition
                   </div>
                 </div>
               </div>

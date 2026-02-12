@@ -46,7 +46,7 @@ const MarketSizeSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
     <div className="p-6">
       <SectionHeader 
         title="Market Size & Share" 
-        subtitle={`${report.base_year} to ${report.forecast_year_to} forecast analysis`}
+        subtitle={`${report.base_year} to ${report.forecast_year} forecast analysis`}
       />
       
       {/* Market Snapshot */}
@@ -54,10 +54,10 @@ const MarketSizeSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
         <div className="p-5 bg-gradient-to-br from-sky-50 to-white rounded-xl border border-sky-100">
           <div className="flex items-center gap-2 mb-2">
             <BarChart3 className="w-5 h-5 text-[#1e3a5f]" />
-            <span className="text-xs text-gray-500">Market Size ({report.market_size_year})</span>
+            <span className="text-xs text-gray-500">Market Size ({report.base_year})</span>
           </div>
           <div className="text-2xl sm:text-3xl font-bold text-gray-900">
-            <span className="text-[#1e3a5f]">${report.market_size_value}</span> {report.market_size_unit}
+            <span className="text-[#1e3a5f]">${report.base_year_value}</span>
           </div>
         </div>
         <div className="p-5 bg-gradient-to-br from-orange-50 to-white rounded-xl border border-orange-100">
@@ -66,15 +66,15 @@ const MarketSizeSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
             <span className="text-xs text-gray-500">CAGR</span>
           </div>
           <div className="text-2xl sm:text-3xl font-bold text-[#f97316]">{report.cagr}</div>
-          <div className="text-xs text-gray-500">({report.forecast_year_from}–{report.forecast_year_to})</div>
+          <div className="text-xs text-gray-500">({report.base_year}–{report.forecast_year})</div>
         </div>
         <div className="p-5 bg-gradient-to-br from-green-50 to-white rounded-xl border border-green-100">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-5 h-5 text-green-600" />
-            <span className="text-xs text-gray-500">Forecast ({report.forecast_year_to})</span>
+            <span className="text-xs text-gray-500">Forecast ({report.forecast_year})</span>
           </div>
           <div className="text-2xl sm:text-3xl font-bold text-gray-900">
-            <span className="text-green-600">${report.forecast_value}</span> {report.forecast_unit}
+            <span className="text-green-600">${report.forecast_year_value}</span>
           </div>
         </div>
       </div>
@@ -105,6 +105,68 @@ const MarketAnalysisSection: React.FC<{ report: ReportDetail }> = ({ report }) =
       <SectionHeader 
         title="Market Analysis" 
         subtitle="Drivers, challenges, and opportunities shaping the market"
+      />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Drivers */}
+        <div className="bg-green-50 rounded-xl p-5 border border-green-100">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="w-5 h-5 text-green-600" />
+            <h3 className="font-semibold text-green-800">Market Drivers</h3>
+          </div>
+          <ul className="space-y-3">
+            {report.market_drivers.map((driver, idx) => (
+              <li key={idx} className="flex items-start gap-2 text-sm text-green-700">
+                <CheckCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>{driver}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Challenges */}
+        <div className="bg-red-50 rounded-xl p-5 border border-red-100">
+          <div className="flex items-center gap-2 mb-4">
+            <AlertTriangle className="w-5 h-5 text-red-600" />
+            <h3 className="font-semibold text-red-800">Market Challenges</h3>
+          </div>
+          <ul className="space-y-3">
+            {report.market_challenges.map((challenge, idx) => (
+              <li key={idx} className="flex items-start gap-2 text-sm text-red-700">
+                <div className="w-1.5 h-1.5 bg-red-400 rounded-full mt-2 flex-shrink-0" />
+                <span>{challenge}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Opportunities */}
+        <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
+          <div className="flex items-center gap-2 mb-4">
+            <Lightbulb className="w-5 h-5 text-blue-600" />
+            <h3 className="font-semibold text-blue-800">Opportunities</h3>
+          </div>
+          <ul className="space-y-3">
+            {report.market_opportunities.map((opportunity, idx) => (
+              <li key={idx} className="flex items-start gap-2 text-sm text-blue-700">
+                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0" />
+                <span>{opportunity}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Card>
+);
+
+// Market Analysis Section
+const MarketDynamicsSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
+  <Card>
+    <div className="p-6">
+      <SectionHeader 
+        title="Market Dynamics" 
+        subtitle="Key market dynamics and their impact on the industry landscape"
       />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -453,7 +515,7 @@ const ScopeSection: React.FC<{ report: ReportDetail }> = ({ report }) => (
           </h4>
           <p className="text-sm text-gray-600">
             Base Year: {report.base_year}<br />
-            Forecast Period: {report.forecast_year_from} - {report.forecast_year_to}
+            Forecast Period: {report.base_year} - {report.forecast_year}
           </p>
         </div>
         
@@ -528,6 +590,7 @@ export const SectionContent: React.FC<SectionContentProps> = ({ report, section 
   const sectionComponents: Record<string, React.ReactNode> = {
     market_size_share: <MarketSizeSection report={report} />,
     market_analysis: <MarketAnalysisSection report={report} />,
+    market_dynamics: <MarketDynamicsSection report={report} />,
     trends_insights: <TrendsSection report={report} />,
     segment_analysis: <SegmentSection report={report} />,
     geography_analysis: <GeographySection report={report} />,
